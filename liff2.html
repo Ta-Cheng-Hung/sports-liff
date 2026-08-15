@@ -1,0 +1,1237 @@
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>體育場地使用狀況</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family:
+        Arial,
+        "Microsoft JhengHei",
+        "Noto Sans TC",
+        sans-serif;
+
+      background: #f5f7fa;
+      color: #333;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* =========================
+       標題
+       ========================= */
+
+    .title {
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+
+    /* =========================
+       球場選擇區
+       ========================= */
+
+    .selector-box {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 20px;
+
+      box-shadow:
+        0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .selector-label {
+      display: block;
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    #courtSelect {
+      width: 100%;
+      max-width: 400px;
+
+      padding: 11px 14px;
+
+      font-size: 17px;
+
+      border: 1px solid #ccc;
+      border-radius: 8px;
+
+      background: #fff;
+
+      cursor: pointer;
+    }
+
+
+    /* =========================
+       載入中
+       ========================= */
+
+    .loading {
+      text-align: center;
+      padding: 40px 10px;
+
+      font-size: 18px;
+      color: #666;
+    }
+
+
+    /* =========================
+       錯誤
+       ========================= */
+
+    .error {
+      background: #ffe5e5;
+      color: #c62828;
+
+      padding: 15px;
+
+      border-radius: 8px;
+
+      text-align: center;
+
+      margin-top: 20px;
+    }
+
+
+    /* =========================
+       表格外框
+       ========================= */
+
+    .table-wrapper {
+      width: 100%;
+
+      overflow-x: auto;
+
+      background: #fff;
+
+      border-radius: 12px;
+
+      box-shadow:
+        0 2px 8px rgba(0,0,0,0.08);
+    }
+
+
+    /* =========================
+       表格
+       ========================= */
+
+    .schedule-table {
+      width: 100%;
+
+      min-width: 900px;
+
+      border-collapse: collapse;
+
+      table-layout: fixed;
+    }
+
+    .schedule-table th,
+    .schedule-table td {
+      border: 1px solid #ddd;
+
+      padding: 12px 8px;
+
+      text-align: center;
+
+      vertical-align: middle;
+    }
+
+
+    /* =========================
+       表頭
+       ========================= */
+
+    .schedule-table thead th {
+      background: #37474f;
+
+      color: white;
+
+      font-weight: bold;
+
+      font-size: 16px;
+    }
+
+
+    /* 第一欄時間 */
+    .schedule-table th:first-child,
+    .schedule-table td:first-child {
+      width: 140px;
+    }
+
+
+    /* =========================
+       時間欄
+       ========================= */
+
+    .time-cell {
+      background: #f1f3f5;
+
+      font-weight: bold;
+
+      color: #444;
+
+      white-space: nowrap;
+    }
+
+
+    /* =========================
+       狀態
+       ========================= */
+
+    .status-cell {
+      font-weight: bold;
+
+      font-size: 15px;
+
+      min-height: 48px;
+    }
+
+
+    /* 可使用 */
+    .available {
+      background: #dff5e3;
+
+      color: #19733b;
+    }
+
+
+    /* 上課 */
+    .class {
+      background: #fff1c7;
+
+      color: #946200;
+    }
+
+
+    /* 已預約 */
+    .reserved {
+      background: #ffdede;
+
+      color: #c62828;
+    }
+
+
+    /* 無資料 */
+    .empty {
+      background: #f5f5f5;
+
+      color: #aaa;
+
+      font-weight: normal;
+    }
+
+
+    /* =========================
+       圖例
+       ========================= */
+
+    .legend {
+      display: flex;
+
+      flex-wrap: wrap;
+
+      gap: 15px;
+
+      margin-top: 18px;
+
+      padding: 0 5px;
+    }
+
+    .legend-item {
+      display: flex;
+
+      align-items: center;
+
+      gap: 6px;
+
+      font-size: 14px;
+    }
+
+    .legend-color {
+      width: 18px;
+      height: 18px;
+
+      border-radius: 4px;
+
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .legend-available {
+      background: #dff5e3;
+    }
+
+    .legend-class {
+      background: #fff1c7;
+    }
+
+    .legend-reserved {
+      background: #ffdede;
+    }
+
+
+    /* =========================
+       手機版
+       ========================= */
+
+    @media (max-width: 768px) {
+
+      body {
+        padding: 10px;
+      }
+
+      .title {
+        font-size: 22px;
+      }
+
+      .selector-box {
+        padding: 15px;
+      }
+
+      .schedule-table {
+        min-width: 850px;
+      }
+
+      .schedule-table th,
+      .schedule-table td {
+        padding: 9px 5px;
+
+        font-size: 14px;
+      }
+
+      .status-cell {
+        font-size: 13px;
+      }
+
+    }
+
+  </style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+  <div class="title">
+    體育場地使用狀況
+  </div>
+
+
+  <!-- =========================
+       球場選擇
+       ========================= -->
+
+  <div class="selector-box">
+
+    <label
+      class="selector-label"
+      for="courtSelect">
+      球場
+    </label>
+
+    <select id="courtSelect">
+      <option value="">
+        資料載入中...
+      </option>
+    </select>
+
+  </div>
+
+
+  <!-- =========================
+       表格
+       ========================= -->
+
+  <div id="scheduleArea">
+
+    <div class="loading">
+      資料載入中...
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       圖例
+       ========================= -->
+
+  <div class="legend">
+
+    <div class="legend-item">
+      <div class="legend-color legend-available"></div>
+      <span>可使用</span>
+    </div>
+
+    <div class="legend-item">
+      <div class="legend-color legend-class"></div>
+      <span>上課</span>
+    </div>
+
+    <div class="legend-item">
+      <div class="legend-color legend-reserved"></div>
+      <span>已預約</span>
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+  /*
+   * ==========================================
+   * 全域資料
+   * ==========================================
+   */
+
+  let allData = [];
+
+
+  /*
+   * ==========================================
+   * 星期順序
+   * ==========================================
+   */
+
+  const WEEKDAYS = [
+    "星期一",
+    "星期二",
+    "星期三",
+    "星期四",
+    "星期五",
+    "星期六",
+    "星期日"
+  ];
+
+
+  /*
+   * ==========================================
+   * 頁面載入
+   * ==========================================
+   */
+
+  window.addEventListener("load", function() {
+
+    loadData();
+
+  });
+
+
+  /*
+   * ==========================================
+   * 從 GAS 取得資料
+   *
+   * 預期 GAS：
+   *
+   * getScheduleData()
+   *
+   * 回傳：
+   *
+   * {
+   *   success: true,
+   *   data: [...]
+   * }
+   * ==========================================
+   */
+
+  function loadData() {
+
+    if (
+      typeof google === "undefined" ||
+      !google.script ||
+      !google.script.run
+    ) {
+
+      showError(
+        "無法連線到 Google Apps Script。"
+      );
+
+      return;
+    }
+
+
+    google.script.run
+
+      .withSuccessHandler(function(result) {
+
+        console.log("GAS 原始資料：", result);
+
+        handleData(result);
+
+      })
+
+      .withFailureHandler(function(error) {
+
+        console.error(
+          "GAS 錯誤：",
+          error
+        );
+
+        showError(
+          "讀取資料失敗：" +
+          (error && error.message
+            ? error.message
+            : error)
+        );
+
+      })
+
+      .getScheduleData();
+
+  }
+
+
+  /*
+   * ==========================================
+   * 處理 GAS 資料
+   * ==========================================
+   */
+
+  function handleData(result) {
+
+    try {
+
+      /*
+       * 如果 GAS 回傳的是 JSON 字串
+       */
+      if (typeof result === "string") {
+
+        result = JSON.parse(result);
+
+      }
+
+
+      /*
+       * 檢查 success
+       */
+
+      if (
+        !result ||
+        result.success !== true
+      ) {
+
+        showError(
+          "GAS 回傳資料格式錯誤。"
+        );
+
+        console.error(
+          "錯誤資料：",
+          result
+        );
+
+        return;
+      }
+
+
+      /*
+       * 取得 data
+       */
+
+      if (!Array.isArray(result.data)) {
+
+        showError(
+          "找不到 data 資料。"
+        );
+
+        console.error(
+          "result.data：",
+          result.data
+        );
+
+        return;
+      }
+
+
+      /*
+       * 儲存資料
+       */
+
+      allData = result.data;
+
+
+      /*
+       * 清除無效資料
+       */
+
+      allData = allData.filter(function(item) {
+
+        return (
+          item &&
+          item.name &&
+          item.weekday &&
+          item.time
+        );
+
+      });
+
+
+      console.log(
+        "整理後資料：",
+        allData
+      );
+
+
+      /*
+       * 建立球場選單
+       */
+
+      createCourtSelect();
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      showError(
+        "處理資料時發生錯誤：" +
+        error.message
+      );
+
+    }
+
+  }
+
+
+  /*
+   * ==========================================
+   * 建立球場選單
+   * ==========================================
+   */
+
+  function createCourtSelect() {
+
+    const select =
+      document.getElementById(
+        "courtSelect"
+      );
+
+
+    /*
+     * 取得所有球場名稱
+     */
+
+    const courts = [
+      ...new Set(
+        allData.map(function(item) {
+
+          return item.name;
+
+        })
+      )
+    ];
+
+
+    /*
+     * 按照出現順序保留
+     */
+
+    if (courts.length === 0) {
+
+      select.innerHTML = `
+        <option value="">
+          沒有球場資料
+        </option>
+      `;
+
+      showError(
+        "目前沒有任何場地資料。"
+      );
+
+      return;
+    }
+
+
+    /*
+     * 建立選單
+     */
+
+    select.innerHTML = courts
+      .map(function(court) {
+
+        return `
+          <option value="${escapeHtml(court)}">
+            ${escapeHtml(court)}
+          </option>
+        `;
+
+      })
+      .join("");
+
+
+    /*
+     * 選擇球場
+     */
+
+    select.addEventListener(
+      "change",
+      function() {
+
+        renderSchedule(
+          this.value
+        );
+
+      }
+    );
+
+
+    /*
+     * 預設第一個球場
+     */
+
+    renderSchedule(
+      courts[0]
+    );
+
+  }
+
+
+  /*
+   * ==========================================
+   * 顯示表格
+   *
+   * ★ 這裡是處理不同時間格式的核心
+   * ==========================================
+   */
+
+  function renderSchedule(courtName) {
+
+    const area =
+      document.getElementById(
+        "scheduleArea"
+      );
+
+
+    /*
+     * 取得目前球場資料
+     */
+
+    const courtData =
+      allData.filter(function(item) {
+
+        return item.name === courtName;
+
+      });
+
+
+    if (courtData.length === 0) {
+
+      area.innerHTML = `
+        <div class="error">
+          找不到「${escapeHtml(courtName)}」的資料。
+        </div>
+      `;
+
+      return;
+    }
+
+
+    /*
+     * ==========================================
+     * 取得所有時間區段
+     *
+     * 注意：
+     *
+     * 不再假設所有時間都是：
+     *
+     * 8:00-10:00
+     * 10:00-12:00
+     *
+     * 因為你的資料還有：
+     *
+     * 9:00-21:00
+     * 12:00-14:00
+     * 17:00-21:30
+     *
+     * 所以直接收集原始 time。
+     * ==========================================
+     */
+
+    const timeMap =
+      new Map();
+
+
+    courtData.forEach(function(item) {
+
+      const time =
+        String(item.time).trim();
+
+
+      if (!timeMap.has(time)) {
+
+        timeMap.set(
+          time,
+          {
+            time: time,
+            start: getStartMinutes(time)
+          }
+        );
+
+      }
+
+    });
+
+
+    /*
+     * ==========================================
+     * 時間排序
+     *
+     * 依開始時間排序。
+     *
+     * 例如：
+     *
+     * 8:00-10:00
+     * 10:00-12:00
+     * 12:00-13:00
+     * 13:00-15:00
+     * 15:00-17:00
+     * 17:00-18:00
+     * 18:00-19:00
+     * 9:00-21:00
+     *
+     * 不會因為字串排序而亂掉。
+     * ==========================================
+     */
+
+    const times =
+      Array.from(
+        timeMap.values()
+      )
+      .sort(function(a, b) {
+
+        /*
+         * 先比較開始時間
+         */
+
+        if (a.start !== b.start) {
+
+          return a.start - b.start;
+
+        }
+
+
+        /*
+         * 如果開始時間相同，
+         * 再比較完整字串
+         */
+
+        return a.time.localeCompare(
+          b.time
+        );
+
+      })
+      .map(function(item) {
+
+        return item.time;
+
+      });
+
+
+    /*
+     * ==========================================
+     * 建立表格
+     * ==========================================
+     */
+
+    let html = `
+
+      <div class="table-wrapper">
+
+        <table class="schedule-table">
+
+          <thead>
+
+            <tr>
+
+              <th>
+                時間
+              </th>
+
+    `;
+
+
+    /*
+     * 星期
+     */
+
+    WEEKDAYS.forEach(function(day) {
+
+      html += `
+        <th>
+          ${day}
+        </th>
+      `;
+
+    });
+
+
+    html += `
+
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+    `;
+
+
+    /*
+     * ==========================================
+     * 每一個時間
+     * ==========================================
+     */
+
+    times.forEach(function(time) {
+
+      html += `
+
+        <tr>
+
+          <td class="time-cell">
+            ${escapeHtml(time)}
+          </td>
+
+      `;
+
+
+      /*
+       * ========================================
+       * 每一個星期
+       * ========================================
+       */
+
+      WEEKDAYS.forEach(function(day) {
+
+
+        /*
+         * 找資料
+         */
+
+        const item =
+          courtData.find(function(row) {
+
+            return (
+              row.weekday === day &&
+              String(row.time).trim() === time
+            );
+
+          });
+
+
+        /*
+         * ======================================
+         * 沒資料
+         * ======================================
+         */
+
+        if (!item) {
+
+          html += `
+
+            <td class="status-cell empty">
+              —
+            </td>
+
+          `;
+
+          return;
+        }
+
+
+        /*
+         * ======================================
+         * ★ 最重要
+         *
+         * 狀態一定從：
+         *
+         * item.status
+         *
+         * 取得
+         * ======================================
+         */
+
+        const status =
+          item.status != null
+            ? String(item.status).trim()
+            : "";
+
+
+        /*
+         * 如果 status 是空的
+         */
+
+        if (!status) {
+
+          html += `
+
+            <td class="status-cell empty">
+              —
+            </td>
+
+          `;
+
+          return;
+        }
+
+
+        /*
+         * 狀態 CSS
+         */
+
+        const statusClass =
+          getStatusClass(status);
+
+
+        /*
+         * 顯示
+         */
+
+        html += `
+
+          <td
+            class="status-cell ${statusClass}">
+            ${escapeHtml(status)}
+          </td>
+
+        `;
+
+      });
+
+
+      html += `
+
+        </tr>
+
+      `;
+
+    });
+
+
+    /*
+     * 結束表格
+     */
+
+    html += `
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    `;
+
+
+    /*
+     * 顯示
+     */
+
+    area.innerHTML = html;
+
+  }
+
+
+  /*
+   * ==========================================
+   * 取得時間的開始分鐘
+   *
+   * 例如：
+   *
+   * 8:00-10:00
+   * ↓
+   * 480
+   *
+   * 17:00-21:30
+   * ↓
+   * 1020
+   * ==========================================
+   */
+
+  function getStartMinutes(time) {
+
+    if (!time) {
+
+      return 999999;
+
+    }
+
+
+    const text =
+      String(time).trim();
+
+
+    /*
+     * 只取 -
+     * 前面的時間
+     */
+
+    const parts =
+      text.split("-");
+
+
+    if (parts.length === 0) {
+
+      return 999999;
+
+    }
+
+
+    const start =
+      parts[0].trim();
+
+
+    /*
+     * 例如：
+     *
+     * 8:00
+     * 09:00
+     * 17:00
+     */
+
+    const match =
+      start.match(
+        /^(\d{1,2}):(\d{2})$/
+      );
+
+
+    if (!match) {
+
+      return 999999;
+
+    }
+
+
+    const hour =
+      parseInt(
+        match[1],
+        10
+      );
+
+
+    const minute =
+      parseInt(
+        match[2],
+        10
+      );
+
+
+    return (
+      hour * 60 +
+      minute
+    );
+
+  }
+
+
+  /*
+   * ==========================================
+   * 狀態 CSS
+   * ==========================================
+   */
+
+  function getStatusClass(status) {
+
+    switch (status) {
+
+      case "可使用":
+        return "available";
+
+
+      case "上課":
+        return "class";
+
+
+      case "已預約":
+        return "reserved";
+
+
+      default:
+        return "";
+
+    }
+
+  }
+
+
+  /*
+   * ==========================================
+   * HTML 安全處理
+   * ==========================================
+   */
+
+  function escapeHtml(value) {
+
+    if (value == null) {
+
+      return "";
+
+    }
+
+
+    return String(value)
+
+      .replace(/&/g, "&amp;")
+
+      .replace(/</g, "&lt;")
+
+      .replace(/>/g, "&gt;")
+
+      .replace(/"/g, "&quot;")
+
+      .replace(/'/g, "&#039;");
+
+  }
+
+
+  /*
+   * ==========================================
+   * 顯示錯誤
+   * ==========================================
+   */
+
+  function showError(message) {
+
+    const area =
+      document.getElementById(
+        "scheduleArea"
+      );
+
+
+    area.innerHTML = `
+
+      <div class="error">
+        ${escapeHtml(message)}
+      </div>
+
+    `;
+
+  }
+
+</script>
+
+</body>
+</html>
+```

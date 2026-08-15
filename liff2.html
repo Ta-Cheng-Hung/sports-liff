@@ -41,6 +41,10 @@ body {
 }
 
 
+/* ========================================
+   Header
+======================================== */
+
 .header {
 
   background:
@@ -114,9 +118,13 @@ body {
 }
 
 
+/* ========================================
+   Container
+======================================== */
+
 .container {
 
-  max-width: 520px;
+  max-width: 560px;
 
   margin: auto;
 
@@ -125,6 +133,10 @@ body {
 
 }
 
+
+/* ========================================
+   User
+======================================== */
 
 .user {
 
@@ -146,6 +158,10 @@ body {
 
 }
 
+
+/* ========================================
+   Search
+======================================== */
 
 .search-box {
 
@@ -209,10 +225,15 @@ body {
 
 .input:focus {
 
-  border-color: #e87918;
+  border-color:
+    #e87918;
 
 }
 
+
+/* ========================================
+   Buttons
+======================================== */
 
 .buttons {
 
@@ -269,10 +290,12 @@ body {
 
   opacity: .55;
 
-  cursor: not-allowed;
-
 }
 
+
+/* ========================================
+   Message
+======================================== */
 
 .message {
 
@@ -311,12 +334,25 @@ body {
 }
 
 
-.result {
+/* ========================================
+   Count
+======================================== */
 
-  margin-top: 15px;
+.count {
+
+  color: #999;
+
+  font-size: 12px;
+
+  margin:
+    0 0 8px 3px;
 
 }
 
+
+/* ========================================
+   Loading
+======================================== */
 
 .loading {
 
@@ -330,6 +366,10 @@ body {
 
 }
 
+
+/* ========================================
+   Empty
+======================================== */
 
 .empty {
 
@@ -351,6 +391,10 @@ body {
 
 }
 
+
+/* ========================================
+   Venue Card
+======================================== */
 
 .venue-card {
 
@@ -383,27 +427,6 @@ body {
 }
 
 
-.venue-type {
-
-  display: inline-block;
-
-  background: #fff1e4;
-
-  color: #d8680d;
-
-  border-radius: 20px;
-
-  padding: 4px 9px;
-
-  font-size: 11px;
-
-  margin-left: 5px;
-
-  vertical-align: middle;
-
-}
-
-
 .row {
 
   font-size: 13px;
@@ -412,7 +435,7 @@ body {
 
   line-height: 1.75;
 
-  margin-top: 3px;
+  margin-top: 4px;
 
 }
 
@@ -424,37 +447,83 @@ body {
 }
 
 
-.note {
+/* ========================================
+   Status
+======================================== */
 
-  margin-top: 9px;
+.status {
 
-  padding-top: 9px;
+  display: inline-block;
 
-  border-top:
-    1px solid #eee;
+  padding:
+    5px 12px;
 
-  color: #777;
+  border-radius:
+    20px;
 
-  font-size: 12px;
+  font-size: 13px;
 
-  line-height: 1.7;
+  font-weight: bold;
 
-  white-space: pre-wrap;
+}
+
+
+/* 上課 = 紅色 */
+
+.status-class {
+
+  background: #ffe5e5;
+
+  color: #d60000;
+
+  border:
+    1px solid #ffb5b5;
 
 }
 
 
-.count {
+/* 可使用 = 綠色 */
 
-  color: #999;
+.status-available {
 
-  font-size: 12px;
+  background: #e4f8ea;
 
-  margin:
-    0 0 8px 3px;
+  color: #16853a;
+
+  border:
+    1px solid #a9dfba;
 
 }
 
+
+/* 已預約 = 黃色 */
+
+.status-reserved {
+
+  background: #fff6c9;
+
+  color: #8a6a00;
+
+  border:
+    1px solid #ead36b;
+
+}
+
+
+/* 其他狀態 */
+
+.status-other {
+
+  background: #f1f3f5;
+
+  color: #555;
+
+}
+
+
+/* ========================================
+   Footer
+======================================== */
 
 .footer {
 
@@ -503,7 +572,7 @@ body {
 
 
 <!-- =====================================
-     LINE User
+     User
 ===================================== -->
 
 <div class="user">
@@ -527,8 +596,8 @@ body {
 
   <div class="description">
 
-    可輸入場館名稱、類型、
-    開放時間、地點或使用方式查詢。
+    可輸入星期、場地名稱、
+    時段或狀態查詢。
 
     <br>
 
@@ -545,7 +614,7 @@ body {
 
     type="text"
 
-    placeholder="例如：體育館、籃球、操場"
+    placeholder="例如：星期一、體育館、08:00、可使用"
 
     onkeydown="enterSearch(event)"
 
@@ -601,16 +670,18 @@ body {
      Result
 ===================================== -->
 
-<div id="count"
-     class="count">
-</div>
+<div
+
+  id="count"
+
+  class="count"
+
+></div>
 
 
 <div
 
   id="result"
-
-  class="result"
 
 ></div>
 
@@ -650,12 +721,18 @@ body {
    設定
 ======================================== */
 
+// 你的 LIFF 2 ID
+
 const LIFF_ID =
   '2011024432-afjj4k3z';
 
 
+// ========================================
+// ⚠️ 把這裡換成 GAS ③ Web App URL
+// ========================================
+
 const API_URL =
-  'https://script.google.com/macros/s/AKfycbycZ6SSJtbZjGgVmkykNjnHkAAajXyawoT2JK-K77mlP4VLmp7IvizUWsM4fkkvFdWa/exec';
+  'https://script.google.com/macros/s/AKfycbxKWa_plj-GtdC7H-7Jwc3nH1nyK56gxu-SZxx9CUEzYQRrFgo-GRtorCA1mHWdRS5I/exec';
 
 
 let lineProfile = {
@@ -746,15 +823,12 @@ async function initLIFF() {
 
 
 /* ========================================
-   API JSONP
+   JSONP API
 ======================================== */
 
 function callAPI(
-
   params,
-
   callback
-
 ) {
 
 
@@ -767,9 +841,7 @@ function callAPI(
     '_' +
 
     Math.floor(
-
       Math.random() * 100000
-
     );
 
 
@@ -953,7 +1025,7 @@ function callAPI(
 
 
 /* ========================================
-   API Ping
+   Ping
 ======================================== */
 
 function pingAPI() {
@@ -982,10 +1054,12 @@ function pingAPI() {
 
 
 /* ========================================
-   Enter Search
+   Enter
 ======================================== */
 
-function enterSearch(event) {
+function enterSearch(
+  event
+) {
 
   if (
     event.key === 'Enter'
@@ -999,7 +1073,7 @@ function enterSearch(event) {
 
 
 /* ========================================
-   搜尋場館
+   搜尋
 ======================================== */
 
 function searchVenue() {
@@ -1113,9 +1187,7 @@ function searchVenue() {
 
 
       renderVenue(
-
         result.data || []
-
       );
 
     }
@@ -1126,11 +1198,10 @@ function searchVenue() {
 
 
 /* ========================================
-   全部場館
+   全部
 ======================================== */
 
 function loadAllVenue() {
-
 
   const button =
 
@@ -1228,9 +1299,7 @@ function loadAllVenue() {
 
 
       renderVenue(
-
         result.data || []
-
       );
 
     }
@@ -1241,13 +1310,12 @@ function loadAllVenue() {
 
 
 /* ========================================
-   顯示場館
+   顯示資料
 ======================================== */
 
 function renderVenue(
   venues
 ) {
-
 
   const box =
 
@@ -1269,7 +1337,6 @@ function renderVenue(
     !venues.length
   ) {
 
-
     count.textContent =
       '';
 
@@ -1278,7 +1345,7 @@ function renderVenue(
 
       '<div class="empty">' +
 
-      '找不到符合條件的場館。' +
+      '找不到符合條件的資料。' +
 
       '</div>';
 
@@ -1291,169 +1358,118 @@ function renderVenue(
   count.textContent =
 
     '共 ' +
-
     venues.length +
-
-    ' 個場館';
+    ' 筆資料';
 
 
   box.innerHTML =
 
     venues
 
-      .map(
-
-        function(venue) {
+      .map(function(venue) {
 
 
-          return `
+        const status =
+          String(
+            venue.status || ''
+          ).trim();
+
+
+        let statusClass =
+          'status-other';
+
+
+        if (
+          status === '上課'
+        ) {
+
+          statusClass =
+            'status-class';
+
+        }
+
+        else if (
+          status === '可使用'
+        ) {
+
+          statusClass =
+            'status-available';
+
+        }
+
+        else if (
+          status === '已預約'
+        ) {
+
+          statusClass =
+            'status-reserved';
+
+        }
+
+
+        return `
 
 <div class="venue-card">
 
+
   <div class="venue-title">
 
+    🏟️
     ${escapeHTML(
       venue.name
     )}
 
-    ${
-      venue.type
+  </div>
 
-        ? `
 
-    <span class="venue-type">
+  <div class="row">
+
+    <strong>
+      📅 星期：
+    </strong>
+
+    ${escapeHTML(
+      venue.weekday
+    )}
+
+  </div>
+
+
+  <div class="row">
+
+    <strong>
+      🕐 時段：
+    </strong>
+
+    ${escapeHTML(
+      venue.time
+    )}
+
+  </div>
+
+
+  <div class="row">
+
+    <strong>
+      狀態：
+    </strong>
+
+    <span class="status ${statusClass}">
 
       ${escapeHTML(
-        venue.type
+        status
       )}
 
     </span>
 
-    `
-
-        : ''
-
-    }
-
   </div>
 
-
-  ${
-    venue.open
-
-      ? `
-
-  <div class="row">
-
-    <strong>🕐 開放時間：</strong>
-
-    ${escapeHTML(
-      venue.open
-    )}
-
-  </div>
-
-  `
-
-      : ''
-
-  }
-
-
-  ${
-    venue.location
-
-      ? `
-
-  <div class="row">
-
-    <strong>📍 地點：</strong>
-
-    ${escapeHTML(
-      venue.location
-    )}
-
-  </div>
-
-  `
-
-      : ''
-
-  }
-
-
-  ${
-    venue.usage
-
-      ? `
-
-  <div class="row">
-
-    <strong>📋 使用方式：</strong>
-
-    ${escapeHTML(
-      venue.usage
-    )}
-
-  </div>
-
-  `
-
-      : ''
-
-  }
-
-
-  ${
-    venue.contact
-
-      ? `
-
-  <div class="row">
-
-    <strong>☎️ 聯絡方式：</strong>
-
-    ${escapeHTML(
-      venue.contact
-    )}
-
-  </div>
-
-  `
-
-      : ''
-
-  }
-
-
-  ${
-    venue.note
-
-      ? `
-
-  <div class="note">
-
-    <strong>備註：</strong>
-
-    ${escapeHTML(
-      venue.note
-    )}
-
-  </div>
-
-  `
-
-      : ''
-
-  }
 
 </div>
 
 `;
 
-        }
-
-      )
+      })
 
       .join('');
 
@@ -1465,13 +1481,9 @@ function renderVenue(
 ======================================== */
 
 function showMessage(
-
   text,
-
   type
-
 ) {
-
 
   const element =
 
@@ -1486,9 +1498,7 @@ function showMessage(
 
 
   element.className =
-
     'message show ' +
-
     (
       type || ''
     );
@@ -1517,13 +1527,12 @@ function clearMessage() {
 
 
 /* ========================================
-   HTML 安全處理
+   HTML 安全
 ======================================== */
 
 function escapeHTML(
   value
 ) {
-
 
   return String(
 

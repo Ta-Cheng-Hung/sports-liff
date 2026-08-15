@@ -1,0 +1,2367 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<title>場館使用｜實踐大學體育室</title>
+
+
+<style>
+
+/* =====================================================
+   基本設定
+===================================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+
+  background:
+    linear-gradient(
+      180deg,
+      #fff8f0 0%,
+      #f7f9fc 100%
+    );
+
+  color: #333;
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+}
+
+
+/* =====================================================
+   Header
+===================================================== */
+
+.header {
+  background:
+    linear-gradient(
+      135deg,
+      #e87918,
+      #f39a45
+    );
+
+  color: white;
+
+  text-align: center;
+
+  padding: 28px 18px 30px;
+
+  border-radius: 0 0 28px 28px;
+
+  box-shadow:
+    0 4px 15px rgba(0,0,0,.12);
+}
+
+.logo {
+  width: 68px;
+  height: 68px;
+
+  margin: 0 auto 12px;
+
+  border-radius: 50%;
+
+  background: white;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #e87918;
+
+  font-size: 30px;
+
+  font-weight: bold;
+}
+
+.header h1 {
+  margin: 5px 0;
+  font-size: 23px;
+}
+
+.header p {
+  margin: 7px 0 0;
+  font-size: 13px;
+  opacity: .92;
+}
+
+
+/* =====================================================
+   Container
+===================================================== */
+
+.container {
+  width: 100%;
+  max-width: 1100px;
+
+  margin: 0 auto;
+
+  padding: 18px 12px 40px;
+}
+
+
+/* =====================================================
+   使用者
+===================================================== */
+
+.user-box {
+  background: white;
+
+  border-radius: 14px;
+
+  padding: 11px 14px;
+
+  margin-bottom: 14px;
+
+  color: #666;
+
+  font-size: 13px;
+
+  box-shadow:
+    0 3px 12px rgba(0,0,0,.05);
+}
+
+
+/* =====================================================
+   球場選擇
+===================================================== */
+
+.select-box {
+  background: white;
+
+  border-radius: 18px;
+
+  padding: 18px;
+
+  margin-bottom: 15px;
+
+  box-shadow:
+    0 3px 12px rgba(0,0,0,.06);
+}
+
+.select-title {
+  font-size: 19px;
+
+  font-weight: bold;
+
+  margin-bottom: 6px;
+}
+
+.select-description {
+  font-size: 13px;
+
+  color: #777;
+
+  line-height: 1.6;
+
+  margin-bottom: 13px;
+}
+
+.venue-select {
+  width: 100%;
+
+  height: 48px;
+
+  border: 1px solid #ddd;
+
+  border-radius: 11px;
+
+  background: white;
+
+  padding: 0 13px;
+
+  font-size: 16px;
+
+  color: #333;
+
+  outline: none;
+}
+
+.venue-select:focus {
+  border-color: #e87918;
+
+  box-shadow:
+    0 0 0 3px rgba(232,121,24,.12);
+}
+
+
+/* =====================================================
+   目前場地
+===================================================== */
+
+.current-venue {
+  margin-top: 12px;
+
+  padding: 10px 12px;
+
+  background: #fff6ed;
+
+  border-radius: 10px;
+
+  color: #c46110;
+
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   圖例
+===================================================== */
+
+.legend {
+  background: white;
+
+  border-radius: 15px;
+
+  padding: 12px 14px;
+
+  margin-bottom: 15px;
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  align-items: center;
+
+  gap: 8px 15px;
+
+  box-shadow:
+    0 3px 12px rgba(0,0,0,.05);
+
+  font-size: 12px;
+
+  color: #555;
+}
+
+.legend-title {
+  font-weight: bold;
+}
+
+.legend-item {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 5px;
+}
+
+.legend-dot {
+  width: 13px;
+  height: 13px;
+
+  border-radius: 50%;
+}
+
+.dot-class {
+  background: #e53935;
+}
+
+.dot-available {
+  background: #2e9d50;
+}
+
+.dot-reserved {
+  background: #e3b800;
+}
+
+
+/* =====================================================
+   表格標題
+===================================================== */
+
+.table-title {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin: 0 3px 9px;
+}
+
+.table-title-main {
+  font-size: 18px;
+
+  font-weight: bold;
+}
+
+.table-title-count {
+  color: #999;
+
+  font-size: 12px;
+}
+
+
+/* =====================================================
+   表格卡片
+===================================================== */
+
+.table-card {
+  background: white;
+
+  border-radius: 17px;
+
+  box-shadow:
+    0 3px 12px rgba(0,0,0,.08);
+
+  overflow: hidden;
+}
+
+
+/* =====================================================
+   橫向滑動
+===================================================== */
+
+.table-scroll {
+  width: 100%;
+
+  overflow-x: auto;
+
+  overflow-y: hidden;
+
+  -webkit-overflow-scrolling: touch;
+
+  scrollbar-width: thin;
+}
+
+
+/* =====================================================
+   表格
+===================================================== */
+
+.schedule-table {
+  border-collapse: separate;
+
+  border-spacing: 0;
+
+  min-width: 850px;
+
+  width: 100%;
+}
+
+
+/* =====================================================
+   表頭
+===================================================== */
+
+.schedule-table th {
+  height: 50px;
+
+  padding: 8px;
+
+  background: #f2f4f6;
+
+  border-right: 1px solid #dfe2e5;
+
+  border-bottom: 1px solid #d7dadd;
+
+  text-align: center;
+
+  font-size: 13px;
+
+  font-weight: bold;
+
+  white-space: nowrap;
+}
+
+
+/* =====================================================
+   第一欄：時間
+===================================================== */
+
+.schedule-table th.time-header {
+  width: 120px;
+
+  min-width: 120px;
+
+  position: sticky;
+
+  left: 0;
+
+  z-index: 5;
+
+  background: #e9edf0;
+}
+
+
+/* =====================================================
+   星期
+===================================================== */
+
+.schedule-table th.day-header {
+  width: 110px;
+
+  min-width: 110px;
+}
+
+
+/* =====================================================
+   星期標題
+===================================================== */
+
+.day-name {
+  font-size: 14px;
+}
+
+
+/* =====================================================
+   表格內容
+===================================================== */
+
+.schedule-table td {
+  height: 70px;
+
+  padding: 6px;
+
+  border-right: 1px solid #e5e7e9;
+
+  border-bottom: 1px solid #e5e7e9;
+
+  text-align: center;
+
+  vertical-align: middle;
+}
+
+
+/* =====================================================
+   第一欄：時間
+===================================================== */
+
+.schedule-table td.time-cell {
+  width: 120px;
+
+  min-width: 120px;
+
+  position: sticky;
+
+  left: 0;
+
+  z-index: 4;
+
+  background: white;
+
+  font-size: 12px;
+
+  font-weight: bold;
+
+  color: #555;
+
+  white-space: nowrap;
+}
+
+
+/* =====================================================
+   狀態
+===================================================== */
+
+.status {
+  width: 100%;
+
+  min-height: 52px;
+
+  padding: 8px 4px;
+
+  border-radius: 10px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-direction: column;
+
+  gap: 3px;
+
+  line-height: 1.4;
+
+  font-size: 12px;
+
+  font-weight: bold;
+}
+
+
+/* =====================================================
+   上課
+===================================================== */
+
+.status-class {
+  background: #ffdede;
+
+  color: #c62828;
+
+  border: 1px solid #ffb0b0;
+}
+
+
+/* =====================================================
+   可使用
+===================================================== */
+
+.status-available {
+  background: #ddf5e4;
+
+  color: #16833a;
+
+  border: 1px solid #a4d9b1;
+}
+
+
+/* =====================================================
+   已預約
+===================================================== */
+
+.status-reserved {
+  background: #fff2b8;
+
+  color: #806500;
+
+  border: 1px solid #e5cf69;
+}
+
+
+/* =====================================================
+   其他狀態
+===================================================== */
+
+.status-other {
+  background: #f1f3f5;
+
+  color: #666;
+
+  border: 1px solid #ddd;
+}
+
+
+/* =====================================================
+   無資料
+===================================================== */
+
+.status-empty {
+  background: #fafafa;
+
+  color: #bbb;
+
+  border: 1px solid #eee;
+
+  font-weight: normal;
+}
+
+
+/* =====================================================
+   Loading
+===================================================== */
+
+.loading {
+  background: white;
+
+  border-radius: 16px;
+
+  padding: 32px 15px;
+
+  text-align: center;
+
+  color: #888;
+
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   Error
+===================================================== */
+
+.error {
+  background: #fff1f1;
+
+  border: 1px solid #ffc8c8;
+
+  color: #c62828;
+
+  border-radius: 14px;
+
+  padding: 16px;
+
+  font-size: 13px;
+
+  line-height: 1.7;
+}
+
+
+/* =====================================================
+   空資料
+===================================================== */
+
+.empty {
+  background: white;
+
+  border-radius: 16px;
+
+  padding: 35px 15px;
+
+  text-align: center;
+
+  color: #999;
+
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   更新時間
+===================================================== */
+
+.update-time {
+  text-align: right;
+
+  margin-top: 8px;
+
+  color: #aaa;
+
+  font-size: 11px;
+}
+
+
+/* =====================================================
+   Footer
+===================================================== */
+
+.footer {
+  margin-top: 25px;
+
+  text-align: center;
+
+  color: #999;
+
+  font-size: 12px;
+
+  line-height: 1.7;
+}
+
+
+/* =====================================================
+   手機
+===================================================== */
+
+@media (max-width: 600px) {
+
+  .container {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .header {
+    padding: 24px 15px 27px;
+  }
+
+  .header h1 {
+    font-size: 21px;
+  }
+
+  .schedule-table {
+    min-width: 850px;
+  }
+
+  .schedule-table th.time-header,
+  .schedule-table td.time-cell {
+    width: 100px;
+    min-width: 100px;
+  }
+
+  .schedule-table th.day-header {
+    width: 107px;
+    min-width: 107px;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =================================================
+     Header
+================================================= -->
+
+<div class="header">
+
+  <div class="logo">
+    館
+  </div>
+
+  <h1>
+    場館使用
+  </h1>
+
+  <p>
+    實踐大學體育室 LINE 智慧服務
+  </p>
+
+</div>
+
+
+<div class="container">
+
+
+<!-- =================================================
+     LINE 使用者
+================================================= -->
+
+<div class="user-box">
+
+  <span id="userStatus">
+    正在連線...
+  </span>
+
+</div>
+
+
+<!-- =================================================
+     球場選擇
+================================================= -->
+
+<div class="select-box">
+
+  <div class="select-title">
+    🏟️ 選擇場地
+  </div>
+
+  <div class="select-description">
+
+    請選擇要查詢的場地，
+    下方將顯示星期一至星期日的使用狀況。
+
+  </div>
+
+  <select
+    id="venueSelect"
+    class="venue-select"
+    onchange="changeVenue()"
+    disabled
+  >
+
+    <option value="">
+      正在載入場地...
+    </option>
+
+  </select>
+
+  <div
+    id="currentVenue"
+    class="current-venue"
+    style="display:none;"
+  ></div>
+
+</div>
+
+
+<!-- =================================================
+     圖例
+================================================= -->
+
+<div class="legend">
+
+  <span class="legend-title">
+    狀態：
+  </span>
+
+  <span class="legend-item">
+
+    <span class="legend-dot dot-class"></span>
+
+    上課
+
+  </span>
+
+  <span class="legend-item">
+
+    <span class="legend-dot dot-available"></span>
+
+    可使用
+
+  </span>
+
+  <span class="legend-item">
+
+    <span class="legend-dot dot-reserved"></span>
+
+    已預約
+
+  </span>
+
+</div>
+
+
+<!-- =================================================
+     表格標題
+================================================= -->
+
+<div class="table-title">
+
+  <div
+    id="tableTitle"
+    class="table-title-main"
+  >
+    場館使用狀況
+  </div>
+
+  <div
+    id="tableCount"
+    class="table-title-count"
+  ></div>
+
+</div>
+
+
+<!-- =================================================
+     表格結果
+================================================= -->
+
+<div id="result">
+
+  <div class="loading">
+    ⏳ 正在載入場館資料...
+  </div>
+
+</div>
+
+
+<div
+  id="updateTime"
+  class="update-time"
+></div>
+
+
+<!-- =================================================
+     Footer
+================================================= -->
+
+<div class="footer">
+
+  實踐大學體育室
+
+  <br>
+
+  LINE 智慧服務中心
+
+  <br>
+
+  © Shih Chien University
+
+</div>
+
+
+</div>
+
+
+<!-- =================================================
+     LIFF SDK
+================================================= -->
+
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+
+<script>
+
+/* =====================================================
+   設定
+===================================================== */
+
+
+/*
+ * -----------------------------------------------------
+ * LIFF ID
+ * -----------------------------------------------------
+ */
+
+const LIFF_ID =
+  '2011024432-afjj4k3z';
+
+
+/*
+ * -----------------------------------------------------
+ * GAS ③ Web App URL
+ * -----------------------------------------------------
+ *
+ * 保留你原本的 GAS API
+ * -----------------------------------------------------
+ */
+
+const API_URL =
+  'https://script.google.com/macros/s/AKfycbwyWQ_pv0Mfu7X9B46xALn8QaDMvbK22MHYINIZl1vMrLxJtwQmsGUU_Sx6UnA4AuyR/exec';
+
+
+/*
+ * -----------------------------------------------------
+ * 全部資料
+ * -----------------------------------------------------
+ */
+
+let allVenueData = [];
+
+
+/*
+ * -----------------------------------------------------
+ * 目前選擇的球場
+ * -----------------------------------------------------
+ */
+
+let selectedVenue = '';
+
+
+/*
+ * -----------------------------------------------------
+ * LINE 使用者
+ * -----------------------------------------------------
+ */
+
+let lineProfile = {
+  userId: '',
+  displayName: ''
+};
+
+
+/*
+ * -----------------------------------------------------
+ * 星期固定順序
+ * -----------------------------------------------------
+ */
+
+const DAYS = [
+  '星期一',
+  '星期二',
+  '星期三',
+  '星期四',
+  '星期五',
+  '星期六',
+  '星期日'
+];
+
+
+/* =====================================================
+   啟動
+===================================================== */
+
+window.addEventListener(
+  'load',
+  initLIFF
+);
+
+
+/* =====================================================
+   LIFF 初始化
+===================================================== */
+
+async function initLIFF() {
+
+  try {
+
+    await liff.init({
+      liffId: LIFF_ID
+    });
+
+
+    if (!liff.isLoggedIn()) {
+
+      liff.login();
+
+      return;
+    }
+
+
+    const profile =
+      await liff.getProfile();
+
+
+    lineProfile.userId =
+      profile.userId || '';
+
+
+    lineProfile.displayName =
+      profile.displayName || '';
+
+
+    document
+      .getElementById('userStatus')
+      .textContent =
+        '您好，' +
+        lineProfile.displayName +
+        ' 👋';
+
+
+    loadVenueData();
+
+
+  } catch (error) {
+
+    console.error(
+      'LIFF 初始化錯誤：',
+      error
+    );
+
+
+    document
+      .getElementById('userStatus')
+      .textContent =
+        'LINE 初始化失敗';
+
+
+    showError(
+      'LINE 初始化失敗：' +
+      error.message
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   載入場館資料
+===================================================== */
+
+function loadVenueData() {
+
+  showLoading();
+
+
+  /*
+   * 保留原本 JSONP → GAS ③ 的方式
+   */
+
+  callAPI(
+    {
+      action: 'all'
+    },
+    function(result) {
+
+      console.log(
+        'GAS 回傳：',
+        result
+      );
+
+
+      /*
+       * 如果 GAS 回傳的是字串
+       */
+
+      if (typeof result === 'string') {
+
+        try {
+
+          result =
+            JSON.parse(result);
+
+        } catch (error) {
+
+          console.error(
+            'JSON 解析失敗：',
+            result
+          );
+
+          showError(
+            'GAS 回傳的資料不是有效 JSON。'
+          );
+
+          return;
+        }
+
+      }
+
+
+      /*
+       * 檢查 success
+       */
+
+      if (
+        !result ||
+        result.success !== true
+      ) {
+
+        showError(
+
+          result &&
+          result.error
+
+            ? result.error
+
+            : '無法取得場館資料'
+
+        );
+
+        return;
+      }
+
+
+      /*
+       * ==========================================
+       * 取得 data
+       * ==========================================
+       */
+
+      if (!Array.isArray(result.data)) {
+
+        showError(
+          'GAS 回傳資料中沒有 data 陣列。'
+        );
+
+        console.error(
+          '錯誤的 GAS 結果：',
+          result
+        );
+
+        return;
+      }
+
+
+      /*
+       * ==========================================
+       * ★ 重要
+       *
+       * 保留完整資料，不在這裡改變 status
+       * ==========================================
+       */
+
+      allVenueData =
+        result.data.map(function(item) {
+
+          return {
+
+            weekday:
+              String(
+                item.weekday ?? ''
+              ).trim(),
+
+            name:
+              String(
+                item.name ?? ''
+              ).trim(),
+
+            time:
+              String(
+                item.time ?? ''
+              ).trim(),
+
+            /*
+             * ★ 狀態一定從 item.status 取得
+             */
+
+            status:
+              item.status == null
+                ? ''
+                : String(
+                    item.status
+                  ).trim()
+
+          };
+
+        });
+
+
+      console.log(
+        '整理後資料：',
+        allVenueData
+      );
+
+
+      /*
+       * 建立球場選單
+       */
+
+      buildVenueSelect();
+
+
+      /*
+       * 預設不顯示資料
+       */
+
+      document
+        .getElementById('result')
+        .innerHTML =
+          '<div class="empty">' +
+          '請先選擇場地。' +
+          '</div>';
+
+
+      document
+        .getElementById('tableCount')
+        .textContent = '';
+
+
+      updateTime();
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   建立球場下拉選單
+===================================================== */
+
+function buildVenueSelect() {
+
+  const select =
+    document.getElementById(
+      'venueSelect'
+    );
+
+
+  const venues = [];
+
+
+  allVenueData.forEach(
+    function(item) {
+
+      const name =
+        String(
+          item.name || ''
+        ).trim();
+
+
+      if (
+        name &&
+        !venues.includes(name)
+      ) {
+
+        venues.push(name);
+
+      }
+
+    }
+  );
+
+
+  /*
+   * 中文排序
+   */
+
+  venues.sort(
+    function(a, b) {
+
+      return a.localeCompare(
+        b,
+        'zh-Hant'
+      );
+
+    }
+  );
+
+
+  select.innerHTML = '';
+
+
+  /*
+   * 預設
+   */
+
+  const defaultOption =
+    document.createElement(
+      'option'
+    );
+
+
+  defaultOption.value = '';
+
+  defaultOption.textContent =
+    '請選擇場地';
+
+
+  select.appendChild(
+    defaultOption
+  );
+
+
+  /*
+   * 建立場地
+   */
+
+  venues.forEach(
+    function(venue) {
+
+      const option =
+        document.createElement(
+          'option'
+        );
+
+
+      option.value =
+        venue;
+
+
+      option.textContent =
+        venue;
+
+
+      select.appendChild(
+        option
+      );
+
+    }
+  );
+
+
+  select.disabled = false;
+
+
+  /*
+   * 沒有場地
+   */
+
+  if (!venues.length) {
+
+    select.innerHTML =
+      '<option value="">' +
+      '目前沒有場地資料' +
+      '</option>';
+
+    select.disabled = true;
+
+  }
+
+}
+
+
+/* =====================================================
+   更換球場
+===================================================== */
+
+function changeVenue() {
+
+  const select =
+    document.getElementById(
+      'venueSelect'
+    );
+
+
+  selectedVenue =
+    select.value;
+
+
+  /*
+   * 尚未選擇
+   */
+
+  if (!selectedVenue) {
+
+    document
+      .getElementById('currentVenue')
+      .style.display =
+        'none';
+
+
+    document
+      .getElementById('result')
+      .innerHTML =
+        '<div class="empty">' +
+        '請先選擇場地。' +
+        '</div>';
+
+
+    document
+      .getElementById('tableTitle')
+      .textContent =
+        '場館使用狀況';
+
+
+    document
+      .getElementById('tableCount')
+      .textContent = '';
+
+
+    return;
+
+  }
+
+
+  /*
+   * 顯示目前場地
+   */
+
+  const currentVenue =
+    document.getElementById(
+      'currentVenue'
+    );
+
+
+  currentVenue.style.display =
+    'block';
+
+
+  currentVenue.innerHTML =
+    '目前查詢：<strong>' +
+    escapeHTML(selectedVenue) +
+    '</strong>';
+
+
+  /*
+   * 建立表格
+   */
+
+  renderSchedule();
+
+}
+
+
+/* =====================================================
+   建立「時間 × 星期」表格
+===================================================== */
+
+function renderSchedule() {
+
+  /*
+   * 篩選目前場地
+   */
+
+  const venueData =
+    allVenueData.filter(
+      function(item) {
+
+        return (
+          String(item.name || '').trim() ===
+          selectedVenue
+        );
+
+      }
+    );
+
+
+  /*
+   * 沒資料
+   */
+
+  if (!venueData.length) {
+
+    document
+      .getElementById('result')
+      .innerHTML =
+        '<div class="empty">' +
+        '此場地目前沒有資料。' +
+        '</div>';
+
+    return;
+
+  }
+
+
+  /*
+   * ===================================================
+   * ★ 取得所有不同時間
+   *
+   * 不假設每個場地時間都一樣
+   *
+   * 例如：
+   *
+   * 籃球場：
+   * 8:00-10:00
+   * 10:00-12:00
+   * ...
+   * 9:00-21:00
+   *
+   * 健身房：
+   * 12:00-14:00
+   * 17:00-21:30
+   *
+   * 都可以存在。
+   * ===================================================
+   */
+
+  const times = [];
+
+
+  venueData.forEach(
+    function(item) {
+
+      const time =
+        String(
+          item.time || ''
+        ).trim();
+
+
+      if (
+        time &&
+        !times.includes(time)
+      ) {
+
+        times.push(time);
+
+      }
+
+    }
+  );
+
+
+  /*
+   * ===================================================
+   * ★ 依開始時間排序
+   * ===================================================
+   */
+
+  times.sort(sortTime);
+
+
+  /*
+   * ===================================================
+   * 建立索引
+   *
+   * key：
+   *
+   * 星期一||8:00-10:00
+   *
+   * 星期六||9:00-21:00
+   *
+   * ===================================================
+   */
+
+  const dataMap = {};
+
+
+  venueData.forEach(
+    function(item) {
+
+      const day =
+        normalizeDay(
+          item.weekday
+        );
+
+
+      const time =
+        String(
+          item.time || ''
+        ).trim();
+
+
+      if (!day || !time) {
+        return;
+      }
+
+
+      const key =
+        day +
+        '||' +
+        time;
+
+
+      /*
+       * ★ 最重要：
+       *
+       * 明確使用 item.status
+       *
+       * 不使用 state、Status、狀態等其他欄位
+       */
+
+      const status =
+        item.status == null
+          ? ''
+          : String(
+              item.status
+            ).trim();
+
+
+      dataMap[key] =
+        status;
+
+    }
+  );
+
+
+  /*
+   * ===================================================
+   * 建立 HTML
+   * ===================================================
+   */
+
+  let html =
+    '<div class="table-card">' +
+
+      '<div class="table-scroll">' +
+
+        '<table class="schedule-table">';
+
+
+  /*
+   * ===================================================
+   * 表頭
+   * ===================================================
+   */
+
+  html +=
+    '<thead>' +
+
+      '<tr>' +
+
+        '<th class="time-header">' +
+          '時間' +
+        '</th>';
+
+
+  DAYS.forEach(
+    function(day) {
+
+      html +=
+        '<th class="day-header">' +
+
+          '<div class="day-name">' +
+            day +
+          '</div>' +
+
+        '</th>';
+
+    }
+  );
+
+
+  html +=
+      '</tr>' +
+
+    '</thead>';
+
+
+  /*
+   * ===================================================
+   * 表身
+   * ===================================================
+   */
+
+  html += '<tbody>';
+
+
+  times.forEach(
+    function(time) {
+
+      html += '<tr>';
+
+
+      /*
+       * 第一欄：時間
+       */
+
+      html +=
+        '<td class="time-cell">' +
+          escapeHTML(time) +
+        '</td>';
+
+
+      /*
+       * 星期一～星期日
+       */
+
+      DAYS.forEach(
+        function(day) {
+
+          const key =
+            day +
+            '||' +
+            time;
+
+
+          const status =
+            Object.prototype.hasOwnProperty.call(
+              dataMap,
+              key
+            )
+              ? dataMap[key]
+              : '';
+
+
+          html += '<td>';
+
+
+          /*
+           * 有狀態
+           */
+
+          if (status) {
+
+            html +=
+              createStatusHTML(
+                status
+              );
+
+          }
+
+
+          /*
+           * 沒有這個時間的資料
+           *
+           * 例如：
+           *
+           * 星期一有 8:00-10:00
+           *
+           * 但星期六沒有
+           *
+           * 就顯示 —
+           */
+
+          else {
+
+            html +=
+              '<div class="status status-empty">' +
+                '—' +
+              '</div>';
+
+          }
+
+
+          html += '</td>';
+
+        }
+      );
+
+
+      html += '</tr>';
+
+    }
+  );
+
+
+  html +=
+      '</tbody>' +
+
+    '</table>' +
+
+  '</div>' +
+
+  '</div>';
+
+
+  /*
+   * 顯示
+   */
+
+  document
+    .getElementById('result')
+    .innerHTML =
+      html;
+
+
+  /*
+   * 標題
+   */
+
+  document
+    .getElementById('tableTitle')
+    .textContent =
+      selectedVenue +
+      ' 使用狀況';
+
+
+  /*
+   * 筆數
+   */
+
+  document
+    .getElementById('tableCount')
+    .textContent =
+      venueData.length +
+      ' 筆';
+
+}
+
+
+/* =====================================================
+   狀態顯示
+===================================================== */
+
+function createStatusHTML(status) {
+
+  const text =
+    String(
+      status || ''
+    ).trim();
+
+
+  let className =
+    'status-other';
+
+
+  let icon = '';
+
+
+  /*
+   * 上課
+   */
+
+  if (text === '上課') {
+
+    className =
+      'status-class';
+
+    icon = '🔴';
+
+  }
+
+
+  /*
+   * 可使用
+   */
+
+  else if (text === '可使用') {
+
+    className =
+      'status-available';
+
+    icon = '🟢';
+
+  }
+
+
+  /*
+   * 已預約
+   */
+
+  else if (text === '已預約') {
+
+    className =
+      'status-reserved';
+
+    icon = '🟡';
+
+  }
+
+
+  return
+    '<div class="status ' +
+      className +
+    '">' +
+
+      '<span>' +
+        icon +
+      '</span>' +
+
+      '<span>' +
+        escapeHTML(text) +
+      '</span>' +
+
+    '</div>';
+
+}
+
+
+/* =====================================================
+   星期標準化
+===================================================== */
+
+function normalizeDay(value) {
+
+  let text =
+    String(
+      value || ''
+    ).trim();
+
+
+  /*
+   * 週一 → 星期一
+   */
+
+  text =
+    text.replace(
+      /^週/,
+      '星期'
+    );
+
+
+  /*
+   * 周一 → 星期一
+   */
+
+  text =
+    text.replace(
+      /^周/,
+      '星期'
+    );
+
+
+  /*
+   * 一 → 星期一
+   */
+
+  if (
+    /^[一二三四五六日]$/.test(text)
+  ) {
+
+    text =
+      '星期' +
+      text;
+
+  }
+
+
+  return text;
+
+}
+
+
+/* =====================================================
+   時間排序
+===================================================== */
+
+function sortTime(a, b) {
+
+  const startA =
+    getStartMinutes(a);
+
+
+  const startB =
+    getStartMinutes(b);
+
+
+  /*
+   * 先依開始時間
+   */
+
+  if (startA !== startB) {
+
+    return startA - startB;
+
+  }
+
+
+  /*
+   * 如果開始時間相同
+   * 再依結束時間
+   */
+
+  return (
+    getEndMinutes(a) -
+    getEndMinutes(b)
+  );
+
+}
+
+
+/* =====================================================
+   取得開始分鐘
+===================================================== */
+
+function getStartMinutes(value) {
+
+  const text =
+    String(
+      value || ''
+    ).trim();
+
+
+  /*
+   * 支援：
+   *
+   * 8:00-10:00
+   * 08:00-10:00
+   * 8：00-10：00
+   */
+
+  const match =
+    text.match(
+      /^(\d{1,2})\s*[:：]\s*(\d{2})/
+    );
+
+
+  if (!match) {
+
+    return 99999;
+
+  }
+
+
+  return (
+    Number(match[1]) * 60 +
+    Number(match[2])
+  );
+
+}
+
+
+/* =====================================================
+   取得結束分鐘
+===================================================== */
+
+function getEndMinutes(value) {
+
+  const text =
+    String(
+      value || ''
+    ).trim();
+
+
+  const parts =
+    text.split('-');
+
+
+  if (parts.length < 2) {
+
+    return 99999;
+
+  }
+
+
+  const end =
+    parts[1].trim();
+
+
+  const match =
+    end.match(
+      /^(\d{1,2})\s*[:：]\s*(\d{2})/
+    );
+
+
+  if (!match) {
+
+    return 99999;
+
+  }
+
+
+  return (
+    Number(match[1]) * 60 +
+    Number(match[2])
+  );
+
+}
+
+
+/* =====================================================
+   API JSONP
+===================================================== */
+
+function callAPI(params, callback) {
+
+  /*
+   * 建立 callback 名稱
+   */
+
+  const callbackName =
+    'venueCallback_' +
+    Date.now() +
+    '_' +
+    Math.floor(
+      Math.random() * 100000
+    );
+
+
+  params.callback =
+    callbackName;
+
+
+  /*
+   * Query String
+   */
+
+  const query =
+    Object.keys(params)
+
+      .map(
+        function(key) {
+
+          return (
+            encodeURIComponent(key) +
+            '=' +
+            encodeURIComponent(params[key])
+          );
+
+        }
+      )
+
+      .join('&');
+
+
+  /*
+   * 建立 script
+   */
+
+  const script =
+    document.createElement(
+      'script'
+    );
+
+
+  let finished = false;
+
+
+  /*
+   * Timeout
+   */
+
+  const timeout =
+    setTimeout(
+      function() {
+
+        if (finished) {
+          return;
+        }
+
+
+        finished = true;
+
+
+        cleanup();
+
+
+        callback({
+
+          success: false,
+
+          error:
+            'GAS ③ API 連線逾時'
+
+        });
+
+      },
+      15000
+    );
+
+
+  /*
+   * JSONP callback
+   */
+
+  window[callbackName] =
+    function(data) {
+
+      if (finished) {
+        return;
+      }
+
+
+      finished = true;
+
+
+      clearTimeout(
+        timeout
+      );
+
+
+      cleanup();
+
+
+      callback(data);
+
+    };
+
+
+  /*
+   * 清除
+   */
+
+  function cleanup() {
+
+    if (script.parentNode) {
+
+      script.parentNode.removeChild(
+        script
+      );
+
+    }
+
+
+    try {
+
+      delete window[callbackName];
+
+    } catch (e) {
+
+      window[callbackName] =
+        undefined;
+
+    }
+
+  }
+
+
+  /*
+   * Error
+   */
+
+  script.onerror =
+    function() {
+
+      if (finished) {
+        return;
+      }
+
+
+      finished = true;
+
+
+      clearTimeout(
+        timeout
+      );
+
+
+      cleanup();
+
+
+      callback({
+
+        success: false,
+
+        error:
+          '無法連線至 GAS ③ API'
+
+      });
+
+    };
+
+
+  /*
+   * 發送 GAS API
+   */
+
+  script.src =
+    API_URL +
+    '?' +
+    query;
+
+
+  document.body.appendChild(
+    script
+  );
+
+}
+
+
+/* =====================================================
+   Loading
+===================================================== */
+
+function showLoading() {
+
+  document
+    .getElementById('result')
+    .innerHTML =
+      '<div class="loading">' +
+        '⏳ 正在載入場館資料...' +
+      '</div>';
+
+}
+
+
+/* =====================================================
+   Error
+===================================================== */
+
+function showError(message) {
+
+  document
+    .getElementById('result')
+    .innerHTML =
+
+      '<div class="error">' +
+
+        '⚠️ ' +
+
+        escapeHTML(message) +
+
+        '<br><br>' +
+
+        '請確認 GAS ③ Web App URL、' +
+        'API action=all，以及 GAS 回傳資料格式。' +
+
+      '</div>';
+
+}
+
+
+/* =====================================================
+   更新時間
+===================================================== */
+
+function updateTime() {
+
+  const now =
+    new Date();
+
+
+  document
+    .getElementById('updateTime')
+    .textContent =
+
+      '最後更新：' +
+
+      now.toLocaleString(
+        'zh-TW',
+        {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit'
+        }
+      );
+
+}
+
+
+/* =====================================================
+   HTML 安全處理
+===================================================== */
+
+function escapeHTML(value) {
+
+  return String(
+
+    value === null ||
+    value === undefined
+
+      ? ''
+
+      : value
+
+  )
+
+    .replace(
+      /&/g,
+      '&amp;'
+    )
+
+    .replace(
+      /</g,
+      '&lt;'
+    )
+
+    .replace(
+      />/g,
+      '&gt;'
+    )
+
+    .replace(
+      /"/g,
+      '&quot;'
+    )
+
+    .replace(
+      /'/g,
+      '&#039;'
+    );
+
+}
+
+</script>
+
+
+</body>
+
+</html>

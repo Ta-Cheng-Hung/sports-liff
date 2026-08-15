@@ -6,17 +6,23 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-      content="width=device-width,initial-scale=1">
+      content="width=device-width, initial-scale=1, viewport-fit=cover">
 
 <title>場館使用｜實踐大學體育室</title>
 
-
 <style>
+
+/* ==========================================
+   基本設定
+========================================== */
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+}
 
 body {
 
@@ -41,9 +47,9 @@ body {
 }
 
 
-/* ========================================
+/* ==========================================
    Header
-======================================== */
+========================================== */
 
 .header {
 
@@ -56,7 +62,8 @@ body {
 
   color: white;
 
-  padding: 26px 20px 30px;
+  padding:
+    28px 18px 30px;
 
   text-align: center;
 
@@ -113,38 +120,41 @@ body {
 
   font-size: 13px;
 
-  opacity: .9;
+  opacity: .92;
 
 }
 
 
-/* ========================================
+/* ==========================================
    Container
-======================================== */
+========================================== */
 
 .container {
 
-  max-width: 560px;
+  width: 100%;
 
-  margin: auto;
+  max-width: 900px;
+
+  margin: 0 auto;
 
   padding:
-    18px 16px 40px;
+    18px 12px 40px;
 
 }
 
 
-/* ========================================
-   User
-======================================== */
+/* ==========================================
+   LINE 使用者
+========================================== */
 
-.user {
+.user-box {
 
   background: white;
 
   border-radius: 14px;
 
-  padding: 12px 15px;
+  padding:
+    11px 14px;
 
   margin-bottom: 14px;
 
@@ -152,26 +162,26 @@ body {
     0 3px 12px
     rgba(0,0,0,.05);
 
-  font-size: 13px;
-
   color: #666;
+
+  font-size: 13px;
 
 }
 
 
-/* ========================================
-   Search
-======================================== */
+/* ==========================================
+   控制區
+========================================== */
 
-.search-box {
+.control-box {
 
   background: white;
 
   border-radius: 18px;
 
-  padding: 18px;
+  padding: 17px;
 
-  margin-bottom: 15px;
+  margin-bottom: 14px;
 
   box-shadow:
     0 3px 12px
@@ -180,17 +190,18 @@ body {
 }
 
 
-.search-box h2 {
-
-  margin:
-    0 0 7px;
+.control-title {
 
   font-size: 19px;
+
+  font-weight: bold;
+
+  margin-bottom: 5px;
 
 }
 
 
-.description {
+.control-description {
 
   color: #777;
 
@@ -198,186 +209,300 @@ body {
 
   line-height: 1.6;
 
-  margin-bottom: 14px;
+  margin-bottom: 13px;
 
 }
 
 
-.input {
+/* ==========================================
+   星期按鈕
+========================================== */
 
-  width: 100%;
-
-  border:
-    1px solid #ddd;
-
-  border-radius: 11px;
-
-  padding: 12px;
-
-  font-size: 15px;
-
-  outline: none;
-
-  margin-bottom: 9px;
-
-}
-
-
-.input:focus {
-
-  border-color:
-    #e87918;
-
-}
-
-
-/* ========================================
-   Buttons
-======================================== */
-
-.buttons {
+.week-buttons {
 
   display: grid;
 
   grid-template-columns:
-    1fr 1fr;
+    repeat(7, 1fr);
 
-  gap: 8px;
+  gap: 6px;
 
 }
 
 
-.button {
-
-  width: 100%;
+.week-button {
 
   border: none;
 
-  border-radius: 11px;
+  border-radius: 9px;
 
-  padding: 13px;
+  padding:
+    10px 4px;
+
+  background: #f1f3f5;
+
+  color: #555;
+
+  font-size: 13px;
+
+  cursor: pointer;
+
+  transition:
+    .15s;
+
+}
+
+
+.week-button:active {
+
+  transform:
+    scale(.96);
+
+}
+
+
+.week-button.active {
 
   background: #e87918;
 
   color: white;
 
-  font-size: 14px;
-
   font-weight: bold;
-
-  cursor: pointer;
 
 }
 
 
-.button.secondary {
+@media (
+  max-width: 500px
+) {
 
-  background: #f1f3f5;
+  .week-buttons {
+
+    grid-template-columns:
+      repeat(4, 1fr);
+
+  }
+
+}
+
+
+/* ==========================================
+   全部按鈕
+========================================== */
+
+.all-button {
+
+  width: 100%;
+
+  margin-top: 9px;
+
+  padding: 10px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background: #f5f5f5;
+
+  color: #666;
+
+  font-size: 13px;
+
+}
+
+
+.all-button:active {
+
+  transform:
+    scale(.98);
+
+}
+
+
+/* ==========================================
+   圖例
+========================================== */
+
+.legend {
+
+  background: white;
+
+  border-radius: 15px;
+
+  padding:
+    12px 14px;
+
+  margin-bottom: 14px;
+
+  box-shadow:
+    0 3px 12px
+    rgba(0,0,0,.05);
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 8px 14px;
+
+  align-items: center;
+
+  font-size: 12px;
 
   color: #555;
 
 }
 
 
-.button:active {
+.legend-title {
 
-  transform: scale(.98);
+  font-weight: bold;
 
-}
-
-
-.button:disabled {
-
-  opacity: .55;
+  margin-right: 2px;
 
 }
 
 
-/* ========================================
-   Message
-======================================== */
+.legend-item {
 
-.message {
+  display: inline-flex;
 
-  margin-top: 11px;
+  align-items: center;
 
-  padding: 11px;
-
-  border-radius: 10px;
-
-  background: #fff8ed;
-
-  color: #777;
-
-  font-size: 13px;
-
-  line-height: 1.6;
-
-  display: none;
+  gap: 5px;
 
 }
 
 
-.message.show {
+.legend-dot {
 
-  display: block;
+  width: 13px;
 
-}
+  height: 13px;
 
+  border-radius: 50%;
 
-.message.error {
-
-  background: #fff2f2;
-
-  color: #c62828;
+  display: inline-block;
 
 }
 
 
-/* ========================================
-   Count
-======================================== */
+.dot-class {
 
-.count {
+  background: #e53935;
+
+}
+
+
+.dot-available {
+
+  background: #2e9d50;
+
+}
+
+
+.dot-reserved {
+
+  background: #e3b800;
+
+}
+
+
+/* ==========================================
+   資料標題
+========================================== */
+
+.result-header {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin:
+    0 2px 8px;
+
+}
+
+
+.result-title {
+
+  font-size: 17px;
+
+  font-weight: bold;
+
+}
+
+
+.result-count {
 
   color: #999;
 
   font-size: 12px;
 
-  margin:
-    0 0 8px 3px;
-
 }
 
 
-/* ========================================
+/* ==========================================
    Loading
-======================================== */
+========================================== */
 
 .loading {
+
+  background: white;
+
+  border-radius: 16px;
+
+  padding: 30px 15px;
 
   text-align: center;
 
   color: #888;
 
-  padding: 25px 5px;
+  font-size: 13px;
+
+  box-shadow:
+    0 3px 12px
+    rgba(0,0,0,.05);
+
+}
+
+
+/* ==========================================
+   Error
+========================================== */
+
+.error {
+
+  background: #fff1f1;
+
+  border:
+    1px solid #ffcaca;
+
+  color: #c62828;
+
+  border-radius: 14px;
+
+  padding: 15px;
+
+  line-height: 1.7;
 
   font-size: 13px;
 
 }
 
 
-/* ========================================
-   Empty
-======================================== */
+/* ==========================================
+   空資料
+========================================== */
 
 .empty {
 
   background: white;
 
-  border-radius: 15px;
+  border-radius: 16px;
 
-  padding: 25px 10px;
+  padding: 30px 15px;
 
   text-align: center;
 
@@ -392,138 +517,278 @@ body {
 }
 
 
-/* ========================================
-   Venue Card
-======================================== */
+/* ==========================================
+   表格外框
+========================================== */
 
-.venue-card {
+.table-card {
 
   background: white;
 
   border-radius: 17px;
 
-  padding: 16px;
-
-  margin-bottom: 11px;
-
   box-shadow:
     0 3px 12px
-    rgba(0,0,0,.06);
+    rgba(0,0,0,.07);
 
-  border-left:
-    4px solid #e87918;
+  overflow: hidden;
 
 }
 
 
-.venue-title {
+/* ==========================================
+   表格水平滑動
+========================================== */
 
-  font-size: 17px;
+.table-scroll {
+
+  width: 100%;
+
+  overflow-x: auto;
+
+  -webkit-overflow-scrolling: touch;
+
+}
+
+
+/* ==========================================
+   表格
+========================================== */
+
+.venue-table {
+
+  border-collapse: separate;
+
+  border-spacing: 0;
+
+  width: 100%;
+
+  min-width: 600px;
+
+  table-layout: fixed;
+
+}
+
+
+/* ==========================================
+   Header
+========================================== */
+
+.venue-table th {
+
+  background: #f5f7f9;
+
+  color: #444;
+
+  font-size: 13px;
 
   font-weight: bold;
 
-  margin-bottom: 10px;
+  padding:
+    12px 8px;
+
+  text-align: center;
+
+  border-right:
+    1px solid #e5e7ea;
+
+  border-bottom:
+    1px solid #ddd;
+
+  white-space: nowrap;
 
 }
 
 
-.row {
+/* 第一欄時段 */
 
-  font-size: 13px;
+.venue-table th.time-column {
+
+  width: 105px;
+
+  position: sticky;
+
+  left: 0;
+
+  z-index: 3;
+
+  background: #eef1f4;
+
+}
+
+
+/* ==========================================
+   Body
+========================================== */
+
+.venue-table td {
+
+  padding:
+    8px;
+
+  text-align: center;
+
+  vertical-align: middle;
+
+  border-right:
+    1px solid #e8eaed;
+
+  border-bottom:
+    1px solid #e8eaed;
+
+  font-size: 12px;
+
+  min-width: 125px;
+
+}
+
+
+/* 時段欄 */
+
+.venue-table td.time-cell {
+
+  width: 105px;
+
+  min-width: 105px;
+
+  position: sticky;
+
+  left: 0;
+
+  z-index: 2;
+
+  background: white;
+
+  font-weight: bold;
 
   color: #555;
 
-  line-height: 1.75;
+}
 
-  margin-top: 4px;
+
+/* ==========================================
+   最後一欄
+========================================== */
+
+.venue-table th:last-child,
+.venue-table td:last-child {
+
+  border-right: none;
 
 }
 
 
-.row strong {
+/* ==========================================
+   狀態格
+========================================== */
 
-  color: #333;
+.status-cell {
 
-}
+  min-height: 58px;
 
-
-/* ========================================
-   Status
-======================================== */
-
-.status {
-
-  display: inline-block;
+  border-radius: 10px;
 
   padding:
-    5px 12px;
+    10px 6px;
 
-  border-radius:
-    20px;
+  display: flex;
 
-  font-size: 13px;
+  align-items: center;
+
+  justify-content: center;
 
   font-weight: bold;
 
+  line-height: 1.4;
+
 }
 
 
-/* 上課 = 紅色 */
+/* ==========================================
+   上課
+========================================== */
 
 .status-class {
 
-  background: #ffe5e5;
+  background: #ffe1e1;
 
-  color: #d60000;
+  color: #c62828;
 
   border:
-    1px solid #ffb5b5;
+    1px solid #ffb3b3;
 
 }
 
 
-/* 可使用 = 綠色 */
+/* ==========================================
+   可使用
+========================================== */
 
 .status-available {
 
-  background: #e4f8ea;
+  background: #e4f7e9;
 
   color: #16853a;
 
   border:
-    1px solid #a9dfba;
+    1px solid #a8ddb6;
 
 }
 
 
-/* 已預約 = 黃色 */
+/* ==========================================
+   已預約
+========================================== */
 
 .status-reserved {
 
-  background: #fff6c9;
+  background: #fff4bd;
 
-  color: #8a6a00;
+  color: #816500;
 
   border:
-    1px solid #ead36b;
+    1px solid #ead36a;
 
 }
 
 
-/* 其他狀態 */
+/* ==========================================
+   其他
+========================================== */
 
 .status-other {
 
   background: #f1f3f5;
 
-  color: #555;
+  color: #666;
+
+  border:
+    1px solid #ddd;
 
 }
 
 
-/* ========================================
+/* ==========================================
+   無資料
+========================================== */
+
+.status-empty {
+
+  background: #fafafa;
+
+  color: #bbb;
+
+  border:
+    1px solid #eee;
+
+  font-weight: normal;
+
+}
+
+
+/* ==========================================
    Footer
-======================================== */
+========================================== */
 
 .footer {
 
@@ -539,6 +804,92 @@ body {
 
 }
 
+
+/* ==========================================
+   更新時間
+========================================== */
+
+.update-time {
+
+  text-align: right;
+
+  color: #aaa;
+
+  font-size: 11px;
+
+  margin-top: 8px;
+
+}
+
+
+/* ==========================================
+   小螢幕
+========================================== */
+
+@media (
+  max-width: 600px
+) {
+
+  .container {
+
+    padding-left: 8px;
+
+    padding-right: 8px;
+
+  }
+
+
+  .header {
+
+    padding:
+      24px 15px 27px;
+
+  }
+
+
+  .header h1 {
+
+    font-size: 21px;
+
+  }
+
+
+  .venue-table {
+
+    min-width: 560px;
+
+  }
+
+
+  .venue-table th {
+
+    padding:
+      10px 5px;
+
+    font-size: 12px;
+
+  }
+
+
+  .venue-table td {
+
+    padding:
+      6px 4px;
+
+  }
+
+
+  .venue-table th.time-column,
+  .venue-table td.time-cell {
+
+    width: 90px;
+
+    min-width: 90px;
+
+  }
+
+}
+
 </style>
 
 </head>
@@ -547,9 +898,9 @@ body {
 <body>
 
 
-<!-- =====================================
+<!-- ==========================================
      Header
-===================================== -->
+========================================== -->
 
 <div class="header">
 
@@ -571,124 +922,203 @@ body {
 <div class="container">
 
 
-<!-- =====================================
-     User
-===================================== -->
+<!-- ==========================================
+     LINE 使用者
+========================================== -->
 
-<div class="user">
+<div class="user-box">
 
   <span id="userStatus">
-    正在初始化 LINE 使用者...
+    正在連線...
   </span>
 
 </div>
 
 
-<!-- =====================================
-     Search
-===================================== -->
+<!-- ==========================================
+     星期選擇
+========================================== -->
 
-<div class="search-box">
+<div class="control-box">
 
-  <h2>
-    🏟️ 場館查詢
-  </h2>
-
-  <div class="description">
-
-    可輸入星期、場地名稱、
-    時段或狀態查詢。
-
-    <br>
-
-    不輸入關鍵字即可查看全部場館。
-
+  <div class="control-title">
+    📅 選擇星期
   </div>
 
+  <div class="control-description">
 
-  <input
-
-    id="keyword"
-
-    class="input"
-
-    type="text"
-
-    placeholder="例如：星期一、體育館、08:00、可使用"
-
-    onkeydown="enterSearch(event)"
-
-  >
-
-
-  <div class="buttons">
-
-    <button
-
-      id="searchButton"
-
-      class="button"
-
-      onclick="searchVenue()"
-
-    >
-
-      🔍 搜尋
-
-    </button>
-
-
-    <button
-
-      id="allButton"
-
-      class="button secondary"
-
-      onclick="loadAllVenue()"
-
-    >
-
-      📋 全部場館
-
-    </button>
+    選擇星期後，
+    系統會顯示該日所有場館使用狀況。
 
   </div>
 
 
   <div
+    id="weekButtons"
+    class="week-buttons"
+  >
 
-    id="message"
+    <button
+      class="week-button"
+      data-week="星期一"
+      onclick="selectWeek('星期一')"
+    >
+      星期一
+    </button>
 
-    class="message"
+    <button
+      class="week-button"
+      data-week="星期二"
+      onclick="selectWeek('星期二')"
+    >
+      星期二
+    </button>
 
-  ></div>
+    <button
+      class="week-button"
+      data-week="星期三"
+      onclick="selectWeek('星期三')"
+    >
+      星期三
+    </button>
+
+    <button
+      class="week-button"
+      data-week="星期四"
+      onclick="selectWeek('星期四')"
+    >
+      星期四
+    </button>
+
+    <button
+      class="week-button"
+      data-week="星期五"
+      onclick="selectWeek('星期五')"
+    >
+      星期五
+    </button>
+
+    <button
+      class="week-button"
+      data-week="星期六"
+      onclick="selectWeek('星期六')"
+    >
+      星期六
+    </button>
+
+    <button
+      class="week-button"
+      data-week="星期日"
+      onclick="selectWeek('星期日')"
+    >
+      星期日
+    </button>
+
+  </div>
+
+
+  <button
+    class="all-button"
+    onclick="selectAll()"
+  >
+    📋 顯示全部資料
+  </button>
 
 </div>
 
 
-<!-- =====================================
-     Result
-===================================== -->
+<!-- ==========================================
+     圖例
+========================================== -->
+
+<div class="legend">
+
+  <span class="legend-title">
+    狀態：
+  </span>
+
+
+  <span class="legend-item">
+
+    <span
+      class="legend-dot dot-class"
+    ></span>
+
+    上課
+
+  </span>
+
+
+  <span class="legend-item">
+
+    <span
+      class="legend-dot dot-available"
+    ></span>
+
+    可使用
+
+  </span>
+
+
+  <span class="legend-item">
+
+    <span
+      class="legend-dot dot-reserved"
+    ></span>
+
+    已預約
+
+  </span>
+
+</div>
+
+
+<!-- ==========================================
+     結果標題
+========================================== -->
+
+<div class="result-header">
+
+  <div
+    id="resultTitle"
+    class="result-title"
+  >
+    場館使用狀況
+  </div>
+
+
+  <div
+    id="resultCount"
+    class="result-count"
+  >
+  </div>
+
+</div>
+
+
+<!-- ==========================================
+     結果
+========================================== -->
+
+<div id="result">
+
+  <div class="loading">
+    正在載入場館資料...
+  </div>
+
+</div>
+
 
 <div
-
-  id="count"
-
-  class="count"
-
-></div>
+  id="updateTime"
+  class="update-time"
+>
+</div>
 
 
-<div
-
-  id="result"
-
-></div>
-
-
-<!-- =====================================
+<!-- ==========================================
      Footer
-===================================== -->
+========================================== -->
 
 <div class="footer">
 
@@ -708,32 +1138,46 @@ body {
 </div>
 
 
-<!-- =====================================
+<!-- ==========================================
      LIFF SDK
-===================================== -->
+========================================== -->
 
 <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
 
 <script>
 
-/* ========================================
+/* ==========================================
    設定
-======================================== */
+========================================== */
 
-// 你的 LIFF 2 ID
+
+// ------------------------------------------
+// LIFF 2 ID
+// ------------------------------------------
 
 const LIFF_ID =
   '2011024432-afjj4k3z';
 
 
-// ========================================
-// ⚠️ 把這裡換成 GAS ③ Web App URL
-// ========================================
+// ------------------------------------------
+// GAS ③ Web App URL
+//
+// ⚠️ 請把下面這一行換成
+// 你的 GAS ③ Web App URL
+// ------------------------------------------
 
 const API_URL =
   'https://script.google.com/macros/s/AKfycbwyWQ_pv0Mfu7X9B46xALn8QaDMvbK22MHYINIZl1vMrLxJtwQmsGUU_Sx6UnA4AuyR/exec';
 
+
+// ------------------------------------------
+// 資料
+// ------------------------------------------
+
+let allVenueData = [];
+
+let selectedWeek = '';
 
 let lineProfile = {
 
@@ -744,15 +1188,19 @@ let lineProfile = {
 };
 
 
-/* ========================================
-   初始化
-======================================== */
+/* ==========================================
+   頁面啟動
+========================================== */
 
 window.addEventListener(
   'load',
   initLIFF
 );
 
+
+/* ==========================================
+   LIFF 初始化
+========================================== */
 
 async function initLIFF() {
 
@@ -766,6 +1214,10 @@ async function initLIFF() {
     });
 
 
+    // --------------------------------------
+    // 尚未登入
+    // --------------------------------------
+
     if (
       !liff.isLoggedIn()
     ) {
@@ -776,6 +1228,10 @@ async function initLIFF() {
 
     }
 
+
+    // --------------------------------------
+    // 取得 LINE 個人資料
+    // --------------------------------------
 
     const profile =
       await liff.getProfile();
@@ -799,15 +1255,18 @@ async function initLIFF() {
         ' 👋';
 
 
-    pingAPI();
-
+    // --------------------------------------
+    // 取得場館資料
+    // --------------------------------------
 
     loadAllVenue();
 
 
-  } catch (err) {
+  } catch (error) {
 
-    console.error(err);
+    console.error(
+      error
+    );
 
 
     document
@@ -815,16 +1274,22 @@ async function initLIFF() {
         'userStatus'
       )
       .textContent =
-        'LINE 初始化失敗，請重新開啟此服務。';
+        'LINE 初始化失敗';
+
+
+    showError(
+      'LINE 初始化失敗：' +
+      error.message
+    );
 
   }
 
 }
 
 
-/* ========================================
-   JSONP API
-======================================== */
+/* ==========================================
+   API
+========================================== */
 
 function callAPI(
   params,
@@ -832,9 +1297,13 @@ function callAPI(
 ) {
 
 
+  // ----------------------------------------
+  // JSONP callback 名稱
+  // ----------------------------------------
+
   const callbackName =
 
-    'apiCallback_' +
+    'venueCallback_' +
 
     Date.now() +
 
@@ -848,6 +1317,10 @@ function callAPI(
   params.callback =
     callbackName;
 
+
+  // ----------------------------------------
+  // Query String
+  // ----------------------------------------
 
   const query =
 
@@ -872,6 +1345,10 @@ function callAPI(
       .join('&');
 
 
+  // ----------------------------------------
+  // 建立 script
+  // ----------------------------------------
+
   const script =
     document.createElement(
       'script'
@@ -881,6 +1358,10 @@ function callAPI(
   let finished = false;
 
 
+  // ----------------------------------------
+  // Timeout
+  // ----------------------------------------
+
   const timeout =
 
     setTimeout(
@@ -888,9 +1369,7 @@ function callAPI(
       function() {
 
         if (finished) {
-
           return;
-
         }
 
 
@@ -916,14 +1395,16 @@ function callAPI(
     );
 
 
+  // ----------------------------------------
+  // Callback
+  // ----------------------------------------
+
   window[callbackName] =
 
     function(data) {
 
       if (finished) {
-
         return;
-
       }
 
 
@@ -942,6 +1423,10 @@ function callAPI(
 
     };
 
+
+  // ----------------------------------------
+  // Cleanup
+  // ----------------------------------------
 
   function cleanup() {
 
@@ -974,14 +1459,16 @@ function callAPI(
   }
 
 
+  // ----------------------------------------
+  // Error
+  // ----------------------------------------
+
   script.onerror =
 
     function() {
 
       if (finished) {
-
         return;
-
       }
 
 
@@ -1001,12 +1488,16 @@ function callAPI(
         success: false,
 
         error:
-          '無法連線至 API'
+          '無法連線至 GAS ③ API'
 
       });
 
     };
 
+
+  // ----------------------------------------
+  // 發送
+  // ----------------------------------------
 
   script.src =
 
@@ -1024,226 +1515,13 @@ function callAPI(
 }
 
 
-/* ========================================
-   Ping
-======================================== */
-
-function pingAPI() {
-
-  callAPI(
-
-    {
-
-      action:
-        'ping'
-
-    },
-
-    function(result) {
-
-      console.log(
-        'LIFF 2 API:',
-        result
-      );
-
-    }
-
-  );
-
-}
-
-
-/* ========================================
-   Enter
-======================================== */
-
-function enterSearch(
-  event
-) {
-
-  if (
-    event.key === 'Enter'
-  ) {
-
-    searchVenue();
-
-  }
-
-}
-
-
-/* ========================================
-   搜尋
-======================================== */
-
-function searchVenue() {
-
-  const keyword =
-
-    document
-      .getElementById(
-        'keyword'
-      )
-      .value
-      .trim();
-
-
-  const button =
-
-    document
-      .getElementById(
-        'searchButton'
-      );
-
-
-  const resultBox =
-
-    document
-      .getElementById(
-        'result'
-      );
-
-
-  clearMessage();
-
-
-  button.disabled =
-    true;
-
-
-  button.textContent =
-    '搜尋中...';
-
-
-  resultBox.innerHTML =
-
-    '<div class="loading">' +
-
-    '正在搜尋場館...' +
-
-    '</div>';
-
-
-  document
-    .getElementById(
-      'count'
-    )
-    .textContent = '';
-
-
-  callAPI(
-
-    {
-
-      action:
-        'venue',
-
-      keyword:
-        keyword
-
-    },
-
-    function(result) {
-
-
-      button.disabled =
-        false;
-
-
-      button.textContent =
-        '🔍 搜尋';
-
-
-      if (
-
-        !result ||
-
-        !result.success
-
-      ) {
-
-
-        resultBox.innerHTML =
-          '';
-
-
-        showMessage(
-
-          result &&
-          result.error
-
-            ? result.error
-
-            : '場館搜尋失敗。',
-
-          'error'
-
-        );
-
-
-        return;
-
-      }
-
-
-      renderVenue(
-        result.data || []
-      );
-
-    }
-
-  );
-
-}
-
-
-/* ========================================
-   全部
-======================================== */
+/* ==========================================
+   載入全部場館
+========================================== */
 
 function loadAllVenue() {
 
-  const button =
-
-    document
-      .getElementById(
-        'allButton'
-      );
-
-
-  const resultBox =
-
-    document
-      .getElementById(
-        'result'
-      );
-
-
-  clearMessage();
-
-
-  button.disabled =
-    true;
-
-
-  button.textContent =
-    '載入中...';
-
-
-  resultBox.innerHTML =
-
-    '<div class="loading">' +
-
-    '正在載入場館資料...' +
-
-    '</div>';
-
-
-  document
-    .getElementById(
-      'count'
-    )
-    .textContent = '';
+  showLoading();
 
 
   callAPI(
@@ -1258,37 +1536,19 @@ function loadAllVenue() {
     function(result) {
 
 
-      button.disabled =
-        false;
-
-
-      button.textContent =
-        '📋 全部場館';
-
-
       if (
-
         !result ||
-
         !result.success
-
       ) {
 
-
-        resultBox.innerHTML =
-          '';
-
-
-        showMessage(
+        showError(
 
           result &&
           result.error
 
             ? result.error
 
-            : '無法載入場館資料。',
-
-          'error'
+            : '無法取得場館資料。'
 
         );
 
@@ -1298,9 +1558,22 @@ function loadAllVenue() {
       }
 
 
-      renderVenue(
-        result.data || []
+      allVenueData =
+        result.data || [];
+
+
+      selectedWeek = '';
+
+
+      clearWeekButtons();
+
+
+      renderTable(
+        allVenueData
       );
+
+
+      updateTime();
 
     }
 
@@ -1309,43 +1582,196 @@ function loadAllVenue() {
 }
 
 
-/* ========================================
-   顯示資料
-======================================== */
+/* ==========================================
+   選擇星期
+========================================== */
 
-function renderVenue(
-  venues
+function selectWeek(
+  week
 ) {
 
-  const box =
+  selectedWeek =
+    week;
 
-    document
-      .getElementById(
-        'result'
+
+  // ----------------------------------------
+  // 按鈕 active
+  // ----------------------------------------
+
+  const buttons =
+    document.querySelectorAll(
+      '.week-button'
+    );
+
+
+  buttons.forEach(
+    function(button) {
+
+      if (
+        button.dataset.week ===
+        week
+      ) {
+
+        button.classList.add(
+          'active'
+        );
+
+      } else {
+
+        button.classList.remove(
+          'active'
+        );
+
+      }
+
+    }
+  );
+
+
+  // ----------------------------------------
+  // 篩選
+  // ----------------------------------------
+
+  const filtered =
+
+    allVenueData.filter(
+      function(item) {
+
+        return normalizeWeek(
+          item.weekday
+        ) ===
+        normalizeWeek(
+          week
+        );
+
+      }
+    );
+
+
+  renderTable(
+    filtered
+  );
+
+}
+
+
+/* ==========================================
+   顯示全部
+========================================== */
+
+function selectAll() {
+
+  selectedWeek = '';
+
+
+  clearWeekButtons();
+
+
+  renderTable(
+    allVenueData
+  );
+
+}
+
+
+/* ==========================================
+   清除星期按鈕
+========================================== */
+
+function clearWeekButtons() {
+
+  const buttons =
+    document.querySelectorAll(
+      '.week-button'
+    );
+
+
+  buttons.forEach(
+    function(button) {
+
+      button.classList.remove(
+        'active'
       );
+
+    }
+  );
+
+}
+
+
+/* ==========================================
+   星期格式標準化
+========================================== */
+
+function normalizeWeek(
+  value
+) {
+
+  return String(
+    value || ''
+  )
+
+    .trim()
+
+    .replace(
+      /\s+/g,
+      ''
+    );
+
+}
+
+
+/* ==========================================
+   顯示表格
+========================================== */
+
+function renderTable(
+  data
+) {
+
+  const result =
+    document.getElementById(
+      'result'
+    );
+
+
+  const title =
+    document.getElementById(
+      'resultTitle'
+    );
 
 
   const count =
+    document.getElementById(
+      'resultCount'
+    );
 
-    document
-      .getElementById(
-        'count'
-      );
 
+  // ----------------------------------------
+  // 沒有資料
+  // ----------------------------------------
 
   if (
-    !venues.length
+    !data ||
+    !data.length
   ) {
 
+    title.textContent =
+      selectedWeek
+        ? selectedWeek +
+          ' 場館使用狀況'
+        : '場館使用狀況';
+
+
     count.textContent =
-      '';
+      '0 筆';
 
 
-    box.innerHTML =
+    result.innerHTML =
 
       '<div class="empty">' +
 
-      '找不到符合條件的資料。' +
+      '目前沒有場館資料。' +
 
       '</div>';
 
@@ -1355,180 +1781,563 @@ function renderVenue(
   }
 
 
+  // ----------------------------------------
+  // 標題
+  // ----------------------------------------
+
+  title.textContent =
+
+    selectedWeek
+
+      ? selectedWeek +
+        ' 場館使用狀況'
+
+      : '全部場館使用狀況';
+
+
   count.textContent =
 
-    '共 ' +
-    venues.length +
-    ' 筆資料';
+    data.length +
+    ' 筆';
 
 
-  box.innerHTML =
+  // ----------------------------------------
+  // 取得場地
+  // ----------------------------------------
 
-    venues
-
-      .map(function(venue) {
-
-
-        const status =
-          String(
-            venue.status || ''
-          ).trim();
+  const venueNames = [];
 
 
-        let statusClass =
-          'status-other';
+  data.forEach(
+    function(item) {
+
+      const name =
+        String(
+          item.name || ''
+        ).trim();
 
 
-        if (
-          status === '上課'
-        ) {
+      if (
+        name &&
+        !venueNames.includes(
+          name
+        )
+      ) {
 
-          statusClass =
-            'status-class';
+        venueNames.push(
+          name
+        );
+
+      }
+
+    }
+  );
+
+
+  // ----------------------------------------
+  // 取得時段
+  // ----------------------------------------
+
+  const times = [];
+
+
+  data.forEach(
+    function(item) {
+
+      const time =
+        String(
+          item.time || ''
+        ).trim();
+
+
+      if (
+        time &&
+        !times.includes(
+          time
+        )
+      ) {
+
+        times.push(
+          time
+        );
+
+      }
+
+    }
+  );
+
+
+  // ----------------------------------------
+  // 排序時段
+  // ----------------------------------------
+
+  times.sort(
+    sortTime
+  );
+
+
+  // ----------------------------------------
+  // 建立資料索引
+  // ----------------------------------------
+
+  const map = {};
+
+
+  data.forEach(
+    function(item) {
+
+      const name =
+        String(
+          item.name || ''
+        ).trim();
+
+
+      const time =
+        String(
+          item.time || ''
+        ).trim();
+
+
+      const key =
+        name +
+        '||' +
+        time;
+
+
+      map[key] =
+        item.status || '';
+
+    }
+  );
+
+
+  // ----------------------------------------
+  // 表格開始
+  // ----------------------------------------
+
+  let html =
+
+    '<div class="table-card">' +
+
+    '<div class="table-scroll">' +
+
+    '<table class="venue-table">';
+
+
+  // ----------------------------------------
+  // 表頭
+  // ----------------------------------------
+
+  html +=
+
+    '<thead>' +
+
+    '<tr>' +
+
+    '<th class="time-column">' +
+
+    '時段' +
+
+    '</th>';
+
+
+  venueNames.forEach(
+    function(name) {
+
+      html +=
+
+        '<th>' +
+
+        escapeHTML(
+          name
+        ) +
+
+        '</th>';
+
+    }
+  );
+
+
+  html +=
+
+    '</tr>' +
+
+    '</thead>';
+
+
+  // ----------------------------------------
+  // 表身
+  // ----------------------------------------
+
+  html +=
+
+    '<tbody>';
+
+
+  times.forEach(
+    function(time) {
+
+      html +=
+
+        '<tr>';
+
+
+      // 時段
+
+      html +=
+
+        '<td class="time-cell">' +
+
+        escapeHTML(
+          time
+        ) +
+
+        '</td>';
+
+
+      // 每一個場地
+
+      venueNames.forEach(
+        function(name) {
+
+
+          const key =
+            name +
+            '||' +
+            time;
+
+
+          const status =
+            map[key];
+
+
+          html +=
+
+            '<td>';
+
+
+          if (
+            status
+          ) {
+
+            html +=
+
+              createStatusHTML(
+                status
+              );
+
+          } else {
+
+            html +=
+
+              '<div class="status-cell status-empty">' +
+
+              '—' +
+
+              '</div>';
+
+          }
+
+
+          html +=
+
+            '</td>';
 
         }
-
-        else if (
-          status === '可使用'
-        ) {
-
-          statusClass =
-            'status-available';
-
-        }
-
-        else if (
-          status === '已預約'
-        ) {
-
-          statusClass =
-            'status-reserved';
-
-        }
+      );
 
 
-        return `
+      html +=
 
-<div class="venue-card">
+        '</tr>';
 
-
-  <div class="venue-title">
-
-    🏟️
-    ${escapeHTML(
-      venue.name
-    )}
-
-  </div>
+    }
+  );
 
 
-  <div class="row">
+  html +=
 
-    <strong>
-      📅 星期：
-    </strong>
+    '</tbody>' +
 
-    ${escapeHTML(
-      venue.weekday
-    )}
+    '</table>' +
 
-  </div>
+    '</div>' +
+
+    '</div>';
 
 
-  <div class="row">
-
-    <strong>
-      🕐 時段：
-    </strong>
-
-    ${escapeHTML(
-      venue.time
-    )}
-
-  </div>
-
-
-  <div class="row">
-
-    <strong>
-      狀態：
-    </strong>
-
-    <span class="status ${statusClass}">
-
-      ${escapeHTML(
-        status
-      )}
-
-    </span>
-
-  </div>
-
-
-</div>
-
-`;
-
-      })
-
-      .join('');
+  result.innerHTML =
+    html;
 
 }
 
 
-/* ========================================
-   Message
-======================================== */
+/* ==========================================
+   狀態 HTML
+========================================== */
 
-function showMessage(
-  text,
-  type
+function createStatusHTML(
+  status
 ) {
 
-  const element =
-
-    document
-      .getElementById(
-        'message'
-      );
+  const text =
+    String(
+      status || ''
+    ).trim();
 
 
-  element.textContent =
-    text;
+  let className =
+    'status-other';
 
 
-  element.className =
-    'message show ' +
-    (
-      type || ''
-    );
-
-}
-
-
-function clearMessage() {
-
-  const element =
-
-    document
-      .getElementById(
-        'message'
-      );
-
-
-  element.textContent =
+  let icon =
     '';
 
 
-  element.className =
-    'message';
+  // ----------------------------------------
+  // 上課
+  // ----------------------------------------
+
+  if (
+    text === '上課'
+  ) {
+
+    className =
+      'status-class';
+
+    icon =
+      '🔴';
+
+  }
+
+
+  // ----------------------------------------
+  // 可使用
+  // ----------------------------------------
+
+  else if (
+    text === '可使用'
+  ) {
+
+    className =
+      'status-available';
+
+    icon =
+      '🟢';
+
+  }
+
+
+  // ----------------------------------------
+  // 已預約
+  // ----------------------------------------
+
+  else if (
+    text === '已預約'
+  ) {
+
+    className =
+      'status-reserved';
+
+    icon =
+      '🟡';
+
+  }
+
+
+  return
+
+    '<div class="status-cell ' +
+    className +
+    '">' +
+
+    icon +
+
+    '<br>' +
+
+    escapeHTML(
+      text
+    ) +
+
+    '</div>';
 
 }
 
 
-/* ========================================
+/* ==========================================
+   時段排序
+========================================== */
+
+function sortTime(
+  a,
+  b
+) {
+
+  const aStart =
+    getStartMinutes(a);
+
+
+  const bStart =
+    getStartMinutes(b);
+
+
+  return (
+    aStart -
+    bStart
+  );
+
+}
+
+
+/* ==========================================
+   取得時段開始時間
+========================================== */
+
+function getStartMinutes(
+  value
+) {
+
+  const text =
+    String(
+      value || ''
+    );
+
+
+  const match =
+    text.match(
+      /(\d{1,2})\s*[:：]\s*(\d{2})/
+    );
+
+
+  if (!match) {
+
+    return 99999;
+
+  }
+
+
+  return (
+
+    Number(
+      match[1]
+    ) * 60 +
+
+    Number(
+      match[2]
+    )
+
+  );
+
+}
+
+
+/* ==========================================
+   Loading
+========================================== */
+
+function showLoading() {
+
+  document
+    .getElementById(
+      'result'
+    )
+    .innerHTML =
+
+      '<div class="loading">' +
+
+      '⏳ 正在載入場館資料...' +
+
+      '</div>';
+
+
+  document
+    .getElementById(
+      'resultCount'
+    )
+    .textContent =
+      '';
+
+}
+
+
+/* ==========================================
+   Error
+========================================== */
+
+function showError(
+  message
+) {
+
+  document
+    .getElementById(
+      'result'
+    )
+    .innerHTML =
+
+      '<div class="error">' +
+
+      '⚠️ ' +
+
+      escapeHTML(
+        message
+      ) +
+
+      '<br><br>' +
+
+      '請確認 GAS ③ Web App 是否已部署最新版本。' +
+
+      '</div>';
+
+
+  document
+    .getElementById(
+      'resultCount'
+    )
+    .textContent =
+      '';
+
+}
+
+
+/* ==========================================
+   更新時間
+========================================== */
+
+function updateTime() {
+
+  const now =
+    new Date();
+
+
+  const text =
+
+    '最後更新：' +
+
+    now.toLocaleString(
+      'zh-TW',
+      {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      }
+    );
+
+
+  document
+    .getElementById(
+      'updateTime'
+    )
+    .textContent =
+      text;
+
+}
+
+
+/* ==========================================
    HTML 安全
-======================================== */
+========================================== */
 
 function escapeHTML(
   value
@@ -1537,7 +2346,6 @@ function escapeHTML(
   return String(
 
     value === null ||
-
     value === undefined
 
       ? ''

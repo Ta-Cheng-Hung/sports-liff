@@ -23,20 +23,28 @@
   box-sizing:border-box;
 }
 
-html,
-body{
+html{
   margin:0;
   padding:0;
   width:100%;
-  min-height:100%;
+  height:auto;
 }
 
 body{
-  background:linear-gradient(
-    180deg,
-    #eef7ff 0%,
-    #f7f9fc 100%
-  );
+  margin:0;
+  padding:0;
+
+  width:100%;
+  height:auto;
+
+  min-height:0;
+
+  background:
+    linear-gradient(
+      180deg,
+      #eef7ff 0%,
+      #f7f9fc 100%
+    );
 
   color:#333;
 
@@ -49,6 +57,8 @@ body{
     sans-serif;
 
   overflow-x:hidden;
+
+  -webkit-text-size-adjust:100%;
 }
 
 
@@ -57,11 +67,15 @@ body{
 ========================================================= */
 
 .header{
-  background:linear-gradient(
-    135deg,
-    #0066a1,
-    #0089c9
-  );
+
+  width:100%;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0066a1,
+      #0089c9
+    );
 
   color:#fff;
 
@@ -77,9 +91,12 @@ body{
     0
     25px
     25px;
+
 }
 
+
 .logo{
+
   width:65px;
   height:65px;
 
@@ -89,27 +106,46 @@ body{
     10px;
 
   background:#fff;
+
   color:#0066a1;
 
   border-radius:50%;
 
   display:flex;
+
   align-items:center;
+
   justify-content:center;
 
   font-size:28px;
+
   font-weight:bold;
+
 }
+
 
 .header h1{
-  margin:5px 0;
+
+  margin:
+    5px
+    0;
+
   font-size:22px;
+
 }
 
+
 .header p{
-  margin:6px 0 0;
+
+  margin:
+    6px
+    0
+    0;
+
   font-size:13px;
+
   opacity:.9;
+
 }
 
 
@@ -118,13 +154,22 @@ body{
 ========================================================= */
 
 .container{
+
   width:100%;
+
   max-width:520px;
 
-  margin:0 auto;
+  margin:
+    0
+    auto;
 
   padding:
     16px;
+
+  height:auto;
+
+  min-height:0;
+
 }
 
 
@@ -133,6 +178,7 @@ body{
 ========================================================= */
 
 .user{
+
   background:#fff;
 
   padding:11px;
@@ -149,9 +195,12 @@ body{
 
   box-shadow:
     0 2px 8px rgba(0,0,0,.05);
+
 }
 
+
 .dot{
+
   display:inline-block;
 
   width:8px;
@@ -162,6 +211,7 @@ body{
   border-radius:50%;
 
   margin-right:5px;
+
 }
 
 
@@ -170,6 +220,7 @@ body{
 ========================================================= */
 
 .tabs{
+
   display:grid;
 
   grid-template-columns:
@@ -178,9 +229,12 @@ body{
   gap:8px;
 
   margin-bottom:12px;
+
 }
 
+
 .tab{
+
   border:0;
 
   background:#fff;
@@ -201,11 +255,16 @@ body{
     0 2px 7px rgba(0,0,0,.05);
 
   cursor:pointer;
+
 }
 
+
 .tab.active{
+
   background:#0066a1;
+
   color:#fff;
+
 }
 
 
@@ -214,7 +273,14 @@ body{
 ========================================================= */
 
 .panel{
+
   display:none;
+
+  width:100%;
+
+  height:auto;
+
+  min-height:0;
 
   background:#fff;
 
@@ -225,20 +291,15 @@ body{
   box-shadow:
     0 3px 12px rgba(0,0,0,.06);
 
-  width:100%;
+  overflow:visible;
 
-  /*
-   * 重要：
-   * 不設定 height
-   * 不設定 min-height
-   * 不設定固定高度
-   */
-  height:auto;
-  min-height:0;
 }
 
+
 .panel.active{
+
   display:block;
+
 }
 
 
@@ -247,15 +308,19 @@ body{
 ========================================================= */
 
 h2{
+
   margin:
     0
     0
     8px;
 
   font-size:19px;
+
 }
 
+
 .desc{
+
   color:#777;
 
   font-size:13px;
@@ -263,6 +328,7 @@ h2{
   line-height:1.7;
 
   margin-bottom:14px;
+
 }
 
 
@@ -271,11 +337,21 @@ h2{
 ========================================================= */
 
 .input{
+
+  display:block;
+
   width:100%;
 
-  padding:12px;
+  height:46px;
 
-  margin-bottom:10px;
+  padding:
+    11px
+    12px;
+
+  margin:
+    0
+    0
+    10px;
 
   border:
     1px
@@ -284,20 +360,47 @@ h2{
 
   border-radius:10px;
 
-  font-size:15px;
+  font-size:16px;
+
+  line-height:1.4;
 
   outline:none;
 
   background:#fff;
+
+  appearance:none;
+
+  -webkit-appearance:none;
+
+  box-shadow:none;
+
 }
+
 
 .input:focus{
+
   border-color:#1683c5;
+
+  outline:none;
+
+  box-shadow:
+    0
+    0
+    0
+    2px
+    rgba(22,131,197,.08);
+
 }
 
+
 textarea.input{
+
+  height:120px;
+
   min-height:120px;
+
   resize:vertical;
+
 }
 
 
@@ -306,7 +409,12 @@ textarea.input{
 ========================================================= */
 
 .button{
+
+  display:block;
+
   width:100%;
+
+  height:auto;
 
   padding:13px;
 
@@ -323,10 +431,14 @@ textarea.input{
   font-weight:bold;
 
   cursor:pointer;
+
 }
 
+
 .button:disabled{
+
   opacity:.55;
+
 }
 
 
@@ -335,6 +447,7 @@ textarea.input{
 ========================================================= */
 
 .message{
+
   display:none;
 
   margin-top:10px;
@@ -346,20 +459,57 @@ textarea.input{
   font-size:13px;
 
   line-height:1.6;
+
 }
+
 
 .message.show{
+
   display:block;
+
 }
+
 
 .message.error{
+
   background:#fff1f1;
+
   color:#c62828;
+
 }
 
+
 .message.success{
+
   background:#eefaf3;
+
   color:#07883a;
+
+}
+
+
+/* =========================================================
+   查詢結果
+========================================================= */
+
+.result{
+
+  display:block;
+
+  width:100%;
+
+  height:auto !important;
+
+  min-height:0 !important;
+
+  max-height:none !important;
+
+  margin-top:14px;
+
+  padding:0;
+
+  overflow:visible !important;
+
 }
 
 
@@ -369,7 +519,14 @@ textarea.input{
 
 .loading,
 .empty{
+
+  display:block;
+
   width:100%;
+
+  height:auto !important;
+
+  min-height:0 !important;
 
   text-align:center;
 
@@ -381,32 +538,6 @@ textarea.input{
 
   font-size:13px;
 
-  height:auto;
-
-  min-height:0;
-}
-
-
-/* =========================================================
-   查詢結果
-========================================================= */
-
-.result{
-  width:100%;
-
-  margin-top:14px;
-
-  height:auto;
-
-  min-height:0;
-
-  /*
-   * 非常重要：
-   * 不允許結果區域自己產生固定高度
-   */
-  max-height:none;
-
-  overflow:visible;
 }
 
 
@@ -416,20 +547,17 @@ textarea.input{
 
 .card{
 
-  display:block;
+  display:block !important;
 
-  width:100%;
+  position:static !important;
 
-  /*
-   * 關鍵修正
-   */
+  width:100% !important;
+
   height:auto !important;
 
   min-height:0 !important;
 
   max-height:none !important;
-
-  overflow:visible;
 
   background:#f8fafc;
 
@@ -439,7 +567,7 @@ textarea.input{
     0
     0
     10px
-    0;
+    0 !important;
 
   border-radius:12px;
 
@@ -448,57 +576,87 @@ textarea.input{
     solid
     #1683c5;
 
-  /*
-   * 防止 Flex/Grid 將卡片拉高
-   */
-  align-self:flex-start;
+  overflow:visible !important;
+
+  white-space:normal;
+
+  flex:none !important;
+
+  flex-grow:0 !important;
+
+  flex-shrink:0 !important;
+
+  align-self:flex-start !important;
+
 }
 
 
 /* =========================================================
-   卡片標題
+   課程標題
 ========================================================= */
 
 .card-title{
 
-  display:block;
+  display:block !important;
 
-  width:100%;
+  position:static !important;
+
+  width:100% !important;
 
   height:auto !important;
 
   min-height:0 !important;
 
-  font-weight:bold;
-
-  font-size:16px;
-
-  line-height:1.5;
+  max-height:none !important;
 
   margin:
     0
     0
-    7px;
+    7px
+    0 !important;
+
+  padding:0 !important;
+
+  font-size:16px;
+
+  font-weight:bold;
+
+  line-height:1.5;
+
+  white-space:normal !important;
 
   word-break:break-word;
 
   overflow-wrap:anywhere;
+
 }
 
 
 /* =========================================================
-   卡片內容
+   課程資料列
 ========================================================= */
 
 .card-row{
 
-  display:block;
+  display:block !important;
 
-  width:100%;
+  position:static !important;
+
+  width:100% !important;
 
   height:auto !important;
 
   min-height:0 !important;
+
+  max-height:none !important;
+
+  margin:
+    0
+    0
+    2px
+    0 !important;
+
+  padding:0 !important;
 
   font-size:13px;
 
@@ -506,13 +664,14 @@ textarea.input{
 
   color:#555;
 
-  margin:0;
-
-  padding:0;
+  white-space:normal !important;
 
   word-break:break-word;
 
   overflow-wrap:anywhere;
+
+  flex:none !important;
+
 }
 
 
@@ -521,21 +680,31 @@ textarea.input{
 ========================================================= */
 
 .faq-card{
+
   border-left-color:#ef8b2c;
+
 }
+
 
 .faq-question{
+
   font-weight:bold;
+
   margin-bottom:6px;
+
 }
 
+
 .faq-answer{
+
   font-size:13px;
+
   line-height:1.8;
 
   white-space:pre-wrap;
 
   word-break:break-word;
+
 }
 
 
@@ -544,6 +713,7 @@ textarea.input{
 ========================================================= */
 
 .footer{
+
   text-align:center;
 
   color:#999;
@@ -555,36 +725,106 @@ textarea.input{
   margin:
     22px
     0;
+
 }
 
 
 /* =========================================================
-   手機版
+   LIFF 手機版
 ========================================================= */
 
 @media(max-width:480px){
 
+  html{
+
+    height:auto !important;
+
+    min-height:0 !important;
+
+  }
+
+
+  body{
+
+    height:auto !important;
+
+    min-height:0 !important;
+
+  }
+
+
+  .header{
+
+    padding:
+      22px
+      16px
+      24px;
+
+  }
+
+
   .container{
+
     padding:
       12px;
+
   }
+
 
   .panel{
+
     padding:
       15px;
+
   }
+
+
+  .input{
+
+    height:46px;
+
+    font-size:16px;
+
+  }
+
+
+  textarea.input{
+
+    height:120px;
+
+    min-height:120px;
+
+  }
+
 
   .card{
-    padding:
-      12px;
+
+    display:block !important;
+
+    height:auto !important;
+
+    min-height:0 !important;
+
+    padding:12px;
+
   }
+
 
   .card-title{
-    font-size:15px;
+
+    height:auto !important;
+
+    min-height:0 !important;
+
   }
 
+
   .card-row{
-    font-size:13px;
+
+    height:auto !important;
+
+    min-height:0 !important;
+
   }
 
 }
@@ -594,12 +834,13 @@ textarea.input{
 </head>
 
 
+
 <body>
 
 
-<!-- =====================================================
+<!-- =======================================================
      Header
-===================================================== -->
+======================================================= -->
 
 <div class="header">
 
@@ -619,16 +860,12 @@ textarea.input{
 
 
 
-<!-- =====================================================
-     Container
-===================================================== -->
-
 <div class="container">
 
 
-  <!-- ===================================================
-       User
-  ==================================================== -->
+  <!-- =====================================================
+       LINE 使用者
+  ====================================================== -->
 
   <div class="user">
 
@@ -642,9 +879,9 @@ textarea.input{
 
 
 
-  <!-- ===================================================
+  <!-- =====================================================
        Tabs
-  ==================================================== -->
+  ====================================================== -->
 
   <div class="tabs">
 
@@ -656,6 +893,7 @@ textarea.input{
       📚 課程查詢
     </button>
 
+
     <button
       class="tab"
       data-tab="faq"
@@ -663,6 +901,7 @@ textarea.input{
     >
       ❓ FAQ
     </button>
+
 
     <button
       class="tab"
@@ -676,9 +915,9 @@ textarea.input{
 
 
 
-  <!-- ===================================================
+  <!-- =====================================================
        課程
-  ==================================================== -->
+  ====================================================== -->
 
   <div
     id="coursePanel"
@@ -689,6 +928,7 @@ textarea.input{
       📚 課程查詢
     </h2>
 
+
     <div class="desc">
       請輸入課程名稱、教師、上課時間或課程代碼。
     </div>
@@ -698,6 +938,7 @@ textarea.input{
       id="courseKeyword"
       class="input"
       type="text"
+      autocomplete="off"
       placeholder="例如：籃球、洪老師、三6~7、SPE-12A-51-A1"
     >
 
@@ -726,9 +967,9 @@ textarea.input{
 
 
 
-  <!-- ===================================================
+  <!-- =====================================================
        FAQ
-  ==================================================== -->
+  ====================================================== -->
 
   <div
     id="faqPanel"
@@ -739,6 +980,7 @@ textarea.input{
       ❓ 常見問題 FAQ
     </h2>
 
+
     <div class="desc">
       請輸入問題關鍵字。
     </div>
@@ -748,6 +990,7 @@ textarea.input{
       id="faqKeyword"
       class="input"
       type="text"
+      autocomplete="off"
       placeholder="例如：重補修、體育3、適應體育、體育室"
     >
 
@@ -776,9 +1019,9 @@ textarea.input{
 
 
 
-  <!-- ===================================================
+  <!-- =====================================================
        意見回饋
-  ==================================================== -->
+  ====================================================== -->
 
   <div
     id="feedbackPanel"
@@ -788,6 +1031,7 @@ textarea.input{
     <h2>
       📝 意見回饋
     </h2>
+
 
     <div class="desc">
       歡迎留下您的問題或建議。
@@ -855,9 +1099,9 @@ textarea.input{
 
 
 
-  <!-- ===================================================
+  <!-- =====================================================
        Footer
-  ==================================================== -->
+  ====================================================== -->
 
   <div class="footer">
 
@@ -874,9 +1118,9 @@ textarea.input{
 
 
 
-<!-- =====================================================
+<!-- =======================================================
      LINE LIFF SDK
-===================================================== -->
+======================================================= -->
 
 <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
@@ -895,13 +1139,22 @@ const LIFF_ID =
   "2011040456-bmrz6CGx";
 
 
+/*
+ * 這裡先使用你目前 LIFF HTML
+ * 正在使用的 GAS ② Web App URL。
+ *
+ * 之後 GAS ② 重新部署時，
+ * 如果 Web App URL 沒有變，
+ * 不需要再改這裡。
+ */
+
 const API_URL =
   "https://script.google.com/macros/s/AKfycbzvOFa6AZG15y82ykySh3vBPL5wirIyMcX6avhb5rYBLmM1dmXlOhViu2gwovBw_8GWdA/exec";
 
 
 
 // =========================================================
-// 啟動
+// DOM Ready
 // =========================================================
 
 document.addEventListener(
@@ -929,7 +1182,9 @@ document.addEventListener(
 
 
     document
-      .getElementById("courseButton")
+      .getElementById(
+        "courseButton"
+      )
       .addEventListener(
         "click",
         searchCourse
@@ -937,7 +1192,9 @@ document.addEventListener(
 
 
     document
-      .getElementById("faqButton")
+      .getElementById(
+        "faqButton"
+      )
       .addEventListener(
         "click",
         searchFAQ
@@ -945,7 +1202,9 @@ document.addEventListener(
 
 
     document
-      .getElementById("feedbackButton")
+      .getElementById(
+        "feedbackButton"
+      )
       .addEventListener(
         "click",
         sendFeedback
@@ -953,12 +1212,16 @@ document.addEventListener(
 
 
     document
-      .getElementById("courseKeyword")
+      .getElementById(
+        "courseKeyword"
+      )
       .addEventListener(
         "keydown",
         function(e){
 
-          if(e.key === "Enter"){
+          if(
+            e.key === "Enter"
+          ){
 
             e.preventDefault();
 
@@ -971,12 +1234,16 @@ document.addEventListener(
 
 
     document
-      .getElementById("faqKeyword")
+      .getElementById(
+        "faqKeyword"
+      )
       .addEventListener(
         "keydown",
         function(e){
 
-          if(e.key === "Enter"){
+          if(
+            e.key === "Enter"
+          ){
 
             e.preventDefault();
 
@@ -1014,7 +1281,10 @@ async function init(){
     ){
 
       await liff.init({
-        liffId: LIFF_ID
+
+        liffId:
+          LIFF_ID
+
       });
 
 
@@ -1032,8 +1302,7 @@ async function init(){
             "您好，"
             +
             (
-              profile.displayName
-              ||
+              profile.displayName ||
               "LINE 使用者"
             )
             +
@@ -1068,10 +1337,12 @@ async function init(){
 
 
 // =========================================================
-// JSONP
+// JSONP API
 // =========================================================
 
-function callAPI(params){
+function callAPI(
+  params
+){
 
   return new Promise(
     function(resolve){
@@ -1084,17 +1355,21 @@ function callAPI(params){
         "_"
         +
         Math.floor(
-          Math.random() * 100000
+          Math.random() *
+          100000
         );
 
 
       const query =
         Object.keys(params)
+
           .map(
             function(key){
 
               return (
-                encodeURIComponent(key)
+                encodeURIComponent(
+                  key
+                )
                 +
                 "="
                 +
@@ -1107,6 +1382,7 @@ function callAPI(params){
 
             }
           )
+
           .join("&");
 
 
@@ -1116,7 +1392,8 @@ function callAPI(params){
         );
 
 
-      let done = false;
+      let done =
+        false;
 
 
       const timer =
@@ -1128,7 +1405,8 @@ function callAPI(params){
             }
 
 
-            done = true;
+            done =
+              true;
 
 
             cleanup();
@@ -1156,7 +1434,8 @@ function callAPI(params){
           }
 
 
-          done = true;
+          done =
+            true;
 
 
           clearTimeout(
@@ -1167,7 +1446,9 @@ function callAPI(params){
           cleanup();
 
 
-          resolve(data);
+          resolve(
+            data
+          );
 
         };
 
@@ -1211,7 +1492,8 @@ function callAPI(params){
           }
 
 
-          done = true;
+          done =
+            true;
 
 
           clearTimeout(
@@ -1263,10 +1545,14 @@ function callAPI(params){
 // 分頁
 // =========================================================
 
-function showTab(name){
+function showTab(
+  name
+){
 
   document
-    .querySelectorAll(".panel")
+    .querySelectorAll(
+      ".panel"
+    )
     .forEach(
       function(panel){
 
@@ -1279,7 +1565,9 @@ function showTab(name){
 
 
   document
-    .querySelectorAll(".tab")
+    .querySelectorAll(
+      ".tab"
+    )
     .forEach(
       function(tab){
 
@@ -1293,7 +1581,8 @@ function showTab(name){
 
   const panel =
     document.getElementById(
-      name + "Panel"
+      name +
+      "Panel"
     );
 
 
@@ -1332,13 +1621,14 @@ function showTab(name){
 
 async function searchCourse(){
 
+  const input =
+    document.getElementById(
+      "courseKeyword"
+    );
+
+
   const keyword =
-    document
-      .getElementById(
-        "courseKeyword"
-      )
-      .value
-      .trim();
+    input.value.trim();
 
 
   const button =
@@ -1394,57 +1684,91 @@ async function searchCourse(){
     '<div class="loading">正在查詢...</div>';
 
 
-  const data =
-    await callAPI({
+  try{
 
-      action:
-        "course",
+    const data =
+      await callAPI({
 
-      keyword:
-        keyword
+        action:
+          "course",
 
-    });
+        keyword:
+          keyword
 
-
-  button.disabled =
-    false;
+      });
 
 
-  button.textContent =
-    "查詢課程";
+    button.disabled =
+      false;
 
 
-  if(
-    !data ||
-    !data.success
-  ){
+    button.textContent =
+      "查詢課程";
+
+
+    if(
+      !data ||
+      !data.success
+    ){
+
+      result.innerHTML =
+        "";
+
+
+      showMessage(
+
+        message,
+
+        data &&
+        data.error
+          ? data.error
+          : "課程查詢失敗。",
+
+        "error"
+
+      );
+
+
+      return;
+
+    }
+
+
+    renderCourses(
+
+      Array.isArray(
+        data.data
+      )
+        ? data.data
+        : []
+
+    );
+
+  }catch(error){
+
+    button.disabled =
+      false;
+
+
+    button.textContent =
+      "查詢課程";
+
 
     result.innerHTML =
       "";
 
 
     showMessage(
+
       message,
 
-      data &&
-      data.error
-        ? data.error
-        : "課程查詢失敗。",
+      "查詢發生錯誤，請稍後再試。",
 
       "error"
+
     );
 
-
-    return;
-
   }
-
-
-  renderCourses(
-    Array.isArray(data.data)
-      ? data.data
-      : []
-  );
 
 }
 
@@ -1453,19 +1777,26 @@ async function searchCourse(){
 // =========================================================
 // 課程結果
 //
-// 這裡特別不用巨大 template literal
-// 改用 DOM 建立卡片
+// 使用 DOM 建立
+// 不使用巨大 HTML Template
 //
-// 可以避免部分 LIFF WebView 排版問題
+// 防止 LINE LIFF WebView
+// 出現異常空白
 // =========================================================
 
-function renderCourses(list){
+function renderCourses(
+  list
+){
 
   const box =
     document.getElementById(
       "courseResult"
     );
 
+
+  /*
+   * 清空舊結果
+   */
 
   box.innerHTML =
     "";
@@ -1500,13 +1831,12 @@ function renderCourses(list){
   }
 
 
-
-  // =======================================================
-  // 一筆一筆建立課程卡片
-  // =======================================================
+  /*
+   * 每一筆資料建立一張卡片
+   */
 
   list.forEach(
-    function(c){
+    function(course){
 
       const card =
         document.createElement(
@@ -1518,9 +1848,9 @@ function renderCourses(list){
         "card";
 
 
-      // ---------------------------------------------------
-      // 課程標題
-      // ---------------------------------------------------
+      /*
+       * 課程標題
+       */
 
       const title =
         document.createElement(
@@ -1532,19 +1862,16 @@ function renderCourses(list){
         "card-title";
 
 
-      const code =
-        c.code || "";
-
-
-      const name =
-        c.name || "";
-
-
       title.textContent =
-        code +
         (
-          name
-            ? "｜" + name
+          course.code ||
+          ""
+        )
+        +
+        (
+          course.name
+            ? "｜" +
+              course.name
             : ""
         );
 
@@ -1554,74 +1881,68 @@ function renderCourses(list){
       );
 
 
-
-      // ---------------------------------------------------
-      // 教師
-      // ---------------------------------------------------
+      /*
+       * 教師
+       */
 
       addCourseRow(
         card,
         "教師：",
-        c.teacher
+        course.teacher
       );
 
 
-
-      // ---------------------------------------------------
-      // 時間
-      // ---------------------------------------------------
+      /*
+       * 時間
+       */
 
       addCourseRow(
         card,
         "時間：",
-        c.time
+        course.time
       );
 
 
-
-      // ---------------------------------------------------
-      // 地點
-      // ---------------------------------------------------
+      /*
+       * 地點
+       */
 
       addCourseRow(
         card,
         "地點：",
-        c.location || "未提供"
+        course.location ||
+        "未提供"
       );
 
 
-
-      // ---------------------------------------------------
-      // 名額
-      // ---------------------------------------------------
+      /*
+       * 名額
+       */
 
       addCourseRow(
         card,
         "名額：",
-        c.limit || "未提供"
+        course.limit ||
+        "未提供"
       );
 
 
+      /*
+       * 備註
+       */
 
-      // ---------------------------------------------------
-      // 備註
-      // ---------------------------------------------------
-
-      if(c.note){
+      if(
+        course.note
+      ){
 
         addCourseRow(
           card,
           "備註：",
-          c.note
+          course.note
         );
 
       }
 
-
-
-      // ---------------------------------------------------
-      // 加入結果區
-      // ---------------------------------------------------
 
       box.appendChild(
         card
@@ -1635,7 +1956,7 @@ function renderCourses(list){
 
 
 // =========================================================
-// 建立課程資料列
+// 課程資料列
 // =========================================================
 
 function addCourseRow(
@@ -1761,57 +2082,91 @@ async function searchFAQ(){
     '<div class="loading">正在搜尋...</div>';
 
 
-  const data =
-    await callAPI({
+  try{
 
-      action:
-        "faq",
+    const data =
+      await callAPI({
 
-      keyword:
-        keyword
+        action:
+          "faq",
 
-    });
+        keyword:
+          keyword
 
-
-  button.disabled =
-    false;
+      });
 
 
-  button.textContent =
-    "搜尋 FAQ";
+    button.disabled =
+      false;
 
 
-  if(
-    !data ||
-    !data.success
-  ){
+    button.textContent =
+      "搜尋 FAQ";
+
+
+    if(
+      !data ||
+      !data.success
+    ){
+
+      result.innerHTML =
+        "";
+
+
+      showMessage(
+
+        message,
+
+        data &&
+        data.error
+          ? data.error
+          : "FAQ 查詢失敗。",
+
+        "error"
+
+      );
+
+
+      return;
+
+    }
+
+
+    renderFAQ(
+
+      Array.isArray(
+        data.data
+      )
+        ? data.data
+        : []
+
+    );
+
+  }catch(error){
+
+    button.disabled =
+      false;
+
+
+    button.textContent =
+      "搜尋 FAQ";
+
 
     result.innerHTML =
       "";
 
 
     showMessage(
+
       message,
 
-      data &&
-      data.error
-        ? data.error
-        : "FAQ 查詢失敗。",
+      "FAQ 查詢發生錯誤。",
 
       "error"
+
     );
 
-
-    return;
-
   }
-
-
-  renderFAQ(
-    Array.isArray(data.data)
-      ? data.data
-      : []
-  );
 
 }
 
@@ -1821,7 +2176,9 @@ async function searchFAQ(){
 // FAQ 結果
 // =========================================================
 
-function renderFAQ(list){
+function renderFAQ(
+  list
+){
 
   const box =
     document.getElementById(
@@ -1888,7 +2245,8 @@ function renderFAQ(list){
       question.textContent =
         "❓ " +
         (
-          item.keyword || ""
+          item.keyword ||
+          ""
         );
 
 
@@ -1908,7 +2266,8 @@ function renderFAQ(list){
 
 
       answer.textContent =
-        item.answer || "";
+        item.answer ||
+        "";
 
 
       card.appendChild(
@@ -1981,115 +2340,149 @@ async function sendFeedback(){
     "送出中...";
 
 
-  const data =
-    await callAPI({
+  try{
 
-      action:
-        "feedback",
+    const data =
+      await callAPI({
 
-      department:
-        document
-          .getElementById(
-            "feedbackDepartment"
-          )
-          .value
-          .trim(),
+        action:
+          "feedback",
 
-      grade:
-        document
-          .getElementById(
-            "feedbackGrade"
-          )
-          .value
-          .trim(),
+        department:
+          document
+            .getElementById(
+              "feedbackDepartment"
+            )
+            .value
+            .trim(),
 
-      studentId:
-        document
-          .getElementById(
-            "feedbackStudentId"
-          )
-          .value
-          .trim(),
+        grade:
+          document
+            .getElementById(
+              "feedbackGrade"
+            )
+            .value
+            .trim(),
 
-      name:
-        document
-          .getElementById(
-            "feedbackName"
-          )
-          .value
-          .trim(),
+        studentId:
+          document
+            .getElementById(
+              "feedbackStudentId"
+            )
+            .value
+            .trim(),
 
-      email:
-        document
-          .getElementById(
-            "feedbackEmail"
-          )
-          .value
-          .trim(),
+        name:
+          document
+            .getElementById(
+              "feedbackName"
+            )
+            .value
+            .trim(),
 
-      question:
-        question
+        email:
+          document
+            .getElementById(
+              "feedbackEmail"
+            )
+            .value
+            .trim(),
 
-    });
+        question:
+          question
 
-
-  button.disabled =
-    false;
+      });
 
 
-  button.textContent =
-    "送出問題";
+    button.disabled =
+      false;
 
 
-  if(
-    !data ||
-    !data.success
-  ){
+    button.textContent =
+      "送出問題";
+
+
+    if(
+      !data ||
+      !data.success
+    ){
+
+      showMessage(
+
+        message,
+
+        data &&
+        data.error
+          ? data.error
+          : "問題送出失敗。",
+
+        "error"
+
+      );
+
+
+      return;
+
+    }
+
 
     showMessage(
+
       message,
 
-      data &&
-      data.error
-        ? data.error
-        : "問題送出失敗。",
+      data.message ||
+      (
+        data.data &&
+        data.data.message
+      ) ||
+      "已收到您的問題，謝謝您的回饋！",
 
-      "error"
+      "success"
+
     );
 
 
-    return;
+    [
+      "feedbackDepartment",
+      "feedbackGrade",
+      "feedbackStudentId",
+      "feedbackName",
+      "feedbackEmail",
+      "feedbackQuestion"
+
+    ].forEach(
+      function(id){
+
+        document
+          .getElementById(id)
+          .value =
+          "";
+
+      }
+    );
+
+
+  }catch(error){
+
+    button.disabled =
+      false;
+
+
+    button.textContent =
+      "送出問題";
+
+
+    showMessage(
+
+      message,
+
+      "問題送出失敗，請稍後再試。",
+
+      "error"
+
+    );
 
   }
-
-
-  showMessage(
-    message,
-
-    data.message ||
-    "已收到您的問題，謝謝您的回饋！",
-
-    "success"
-  );
-
-
-  [
-    "feedbackDepartment",
-    "feedbackGrade",
-    "feedbackStudentId",
-    "feedbackName",
-    "feedbackEmail",
-    "feedbackQuestion"
-
-  ].forEach(
-    function(id){
-
-      document
-        .getElementById(id)
-        .value = "";
-
-    }
-  );
 
 }
 
@@ -2112,7 +2505,8 @@ function showMessage(
   el.className =
     "message show " +
     (
-      type || ""
+      type ||
+      ""
     );
 
 }

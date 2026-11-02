@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>體適能五向能力雷達圖</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #f8fafc;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .card {
+      background: white;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 480px;
+      box-sizing: border-box;
+    }
+    h2 { margin: 0 0 8px 0; color: #1e3a8a; text-align: center; font-size: 20px; }
+    p { margin: 0 0 20px 0; color: #64748b; text-align: center; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2 id="studentTitle">體適能五向能力雷達圖</h2>
+    <p>常模百分等級 (PR) 綜合指標分析</p>
+    <canvas id="radarChart"></canvas>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const flex = parseFloat(params.get('flex')) || 50;
+    const muscle = parseFloat(params.get('muscle')) || 50;
+    const power = parseFloat(params.get('power')) || 50;
+    const cardio = parseFloat(params.get('cardio')) || 50;
+    const name = params.get('name');
+
+    if (name) {
+      document.getElementById('studentTitle').innerText = `${decodeURIComponent(name)} 的體適能能力圖`;
+    }
+
+    const ctx = document.getElementById('radarChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'radar',
+      data: {
+        labels: ['柔軟度 PR', '肌耐力 PR', '瞬發力 PR', '心肺耐力 PR'],
+        datasets: [{
+          label: '學生表現 (PR)',
+          data: [flex, muscle, power, cardio],
+          fill: true,
+          backgroundColor: 'rgba(37, 99, 235, 0.25)',
+          borderColor: 'rgb(37, 99, 235)',
+          pointBackgroundColor: 'rgb(30, 58, 138)',
+          pointBorderColor: '#fff',
+          pointHoverBackgroundColor: '#fff',
+          pointHoverBorderColor: 'rgb(37, 99, 235)'
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          r: {
+            suggestedMin: 0,
+            suggestedMax: 100,
+            ticks: { stepSize: 20 }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

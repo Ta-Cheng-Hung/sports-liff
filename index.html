@@ -26,6 +26,7 @@
     }
     h2 { margin: 0 0 8px 0; color: #1e3a8a; text-align: center; font-size: 20px; }
     p { margin: 0 0 20px 0; color: #64748b; text-align: center; font-size: 14px; }
+    #note { margin: 16px 0 0 0; color: #94a3b8; font-size: 12px; }
   </style>
 </head>
 <body>
@@ -33,28 +34,50 @@
     <h2 id="studentTitle">體適能五向能力雷達圖</h2>
     <p>常模百分等級 (PR) 綜合指標分析</p>
     <canvas id="radarChart"></canvas>
+    <p id="note"></p>
   </div>
 
   <script>
     const params = new URLSearchParams(window.location.search);
-    const flex = parseFloat(params.get('flex')) || 50;
-    const muscle = parseFloat(params.get('muscle')) || 50;
-    const power = parseFloat(params.get('power')) || 50;
-    const cardio = parseFloat(params.get('cardio')) || 50;
+
+    // 讀取數值：沒有參數、空白、"na" 或非數字 → null（不畫點）；0 視為有效數值
+    function readPR(key) {
+      const raw = params.get(key);
+      if (raw === null || raw.trim() === '' || raw.trim().toLowerCase() === 'na') return null;
+      const n = parseFloat(raw);
+      return Number.isFinite(n) ? n : null;
+    }
+
+    const items = [
+      { label: '柔軟度', value: readPR('flex') },
+      { label: '肌耐力', value: readPR('muscle') },
+      { label: '瞬發力', value: readPR('power') },
+      { label: '心肺耐力', value: readPR('cardio') }
+    ];
     const name = params.get('name');
 
     if (name) {
       document.getElementById('studentTitle').innerText = `${decodeURIComponent(name)} 的體適能能力圖`;
     }
 
+    // 缺資料的軸，標籤加註「未檢測」
+    const labels = items.map(i => i.value === null ? `${i.label}（未檢測）` : `${i.label} PR`);
+    const data = items.map(i => i.value);
+
+    const missing = items.filter(i => i.value === null).map(i => i.label);
+    if (missing.length > 0) {
+      document.getElementById('note').innerText = `${missing.join('、')}未檢測或無常模，未列入圖形。`;
+    }
+
     const ctx = document.getElementById('radarChart').getContext('2d');
     new Chart(ctx, {
       type: 'radar',
       data: {
-        labels: ['柔軟度 PR', '肌耐力 PR', '瞬發力 PR', '心肺耐力 PR'],
+        labels: labels,
         datasets: [{
           label: '學生表現 (PR)',
-          data: [flex, muscle, power, cardio],
+          data: data,
+          spanGaps: true, // 跳過缺資料的軸，用其餘項目連成圖形
           fill: true,
           backgroundColor: 'rgba(37, 99, 235, 0.25)',
           borderColor: 'rgb(37, 99, 235)',

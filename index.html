@@ -7,127 +7,133 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: #f8fafc;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .card {
-      background: white;
-      padding: 24px;
-      border-radius: 16px;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 480px;
-      box-sizing: border-box;
-    }
-    h2 { margin: 0 0 8px 0; color: #1e3a8a; text-align: center; font-size: 20px; }
-    p { margin: 0 0 20px 0; color: #64748b; text-align: center; font-size: 14px; }
-    #note { margin: 16px 0 0 0; color: #94a3b8; font-size: 12px; }
-    #closeBtn {
-      display: block;
-      width: 100%;
-      max-width: 480px;
-      margin-top: 16px;
-      padding: 14px;
-      border: none;
-      border-radius: 12px;
-      background: #2563eb;
-      color: #fff;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    #closeBtn:active { background: #1e3a8a; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background:#f8fafc; margin:0; padding:20px; display:flex; flex-direction:column; align-items:center; }
+    .card { background:#fff; padding:24px; border-radius:16px; box-shadow:0 4px 6px -1px rgba(0,0,0,.1);
+      width:100%; max-width:480px; box-sizing:border-box; margin-bottom:16px; }
+    h2 { margin:0 0 8px; color:#1e3a8a; text-align:center; font-size:20px; }
+    h3 { margin:0 0 12px; color:#1e3a8a; font-size:16px; }
+    p { margin:0 0 20px; color:#64748b; text-align:center; font-size:14px; }
+    #timeLabel { margin:0 0 12px; color:#2563eb; font-weight:bold; font-size:14px; text-align:center; }
+    #note { margin:16px 0 0; color:#94a3b8; font-size:12px; }
+    .rec { display:flex; justify-content:space-between; align-items:center; width:100%;
+      padding:12px; margin-bottom:8px; border:1px solid #e2e8f0; border-radius:10px;
+      background:#fff; font-size:14px; color:#334155; cursor:pointer; text-align:left; }
+    .rec.active { border-color:#2563eb; background:#eff6ff; }
+    .rec small { color:#64748b; }
+    #closeBtn { display:block; width:100%; max-width:480px; padding:14px; border:none; border-radius:12px;
+      background:#2563eb; color:#fff; font-size:16px; font-weight:bold; cursor:pointer; }
+    #closeBtn:active { background:#1e3a8a; }
   </style>
 </head>
 <body>
   <div class="card">
     <h2 id="studentTitle">體適能能力雷達圖</h2>
     <p>常模百分等級 (PR) 綜合指標分析</p>
+    <div id="timeLabel"></div>
     <canvas id="radarChart"></canvas>
     <p id="note"></p>
+  </div>
+
+  <div class="card" id="historyCard" style="display:none">
+    <h3>📅 歷次檢測紀錄（點選可切換雷達圖）</h3>
+    <div id="historyList"></div>
   </div>
 
   <button id="closeBtn">✕ 關閉，回到 LINE</button>
 
   <script>
-    // ===== LIFF 設定：請把下面換成你的 LIFF ID（格式：1234567890-AbCdEfGh）=====
     const LIFF_ID = "2012441184-m2uxPqCE";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbyLEA93HQBS7oFL1x08UC8B7yto6TvlPOzB2MW3_iUmp5A1OVId0uWIyZufxM2bbHKJ/exec";
 
-    document.getElementById('closeBtn').addEventListener('click', () => {
-      try {
-        if (window.liff && liff.isInClient()) {
-          liff.closeWindow();
-          return;
-        }
-      } catch (e) {}
-      window.close(); // 非 LINE 環境的備援（部分瀏覽器會擋）
-    });
-
+    // ===== LIFF =====
     if (window.liff) {
       liff.init({ liffId: LIFF_ID }).catch(err => console.log("LIFF 初始化失敗：", err));
     }
+    document.getElementById('closeBtn').addEventListener('click', () => {
+      try {
+        if (window.liff && liff.isInClient()) { liff.closeWindow(); return; }
+      } catch (e) {}
+      alert("目前不是在 LINE 內開啟，無法返回 LINE。");
+      window.close();
+    });
 
-    // ===== 雷達圖 =====
+    // ===== 讀取網址參數（本次成績）=====
     const params = new URLSearchParams(window.location.search);
-
-    // 沒有參數、空白、"na" 或非數字 → null（不畫點）；0 視為有效數值
     function readPR(key) {
       const raw = params.get(key);
       if (raw === null || raw.trim() === '' || raw.trim().toLowerCase() === 'na') return null;
       const n = parseFloat(raw);
       return Number.isFinite(n) ? n : null;
     }
+    const name = params.get('name');
+    const sid = params.get('sid');
+    if (name) document.getElementById('studentTitle').innerText = `${name} 的體適能能力圖`;
 
-    const items = [
-      { label: '柔軟度', value: readPR('flex') },
-      { label: '肌耐力', value: readPR('muscle') },
-      { label: '瞬發力', value: readPR('power') },
-      { label: '心肺耐力', value: readPR('cardio') }
+    const BASE = [
+      { key: 'flex', label: '柔軟度' },
+      { key: 'muscle', label: '肌耐力' },
+      { key: 'power', label: '瞬發力' },
+      { key: 'cardio', label: '心肺耐力' }
     ];
 
-    // URLSearchParams 已自動解碼，不需要再 decodeURIComponent
-    const name = params.get('name');
-    if (name) {
-      document.getElementById('studentTitle').innerText = `${name} 的體適能能力圖`;
-    }
-
-    const labels = items.map(i => i.value === null ? `${i.label}（未檢測）` : `${i.label} PR`);
-    const data = items.map(i => i.value);
-
-    const missing = items.filter(i => i.value === null).map(i => i.label);
-    if (missing.length > 0) {
-      document.getElementById('note').innerText = `${missing.join('、')}未檢測或無常模，未列入圖形。`;
-    }
-
-    const ctx = document.getElementById('radarChart').getContext('2d');
-    new Chart(ctx, {
+    const chart = new Chart(document.getElementById('radarChart').getContext('2d'), {
       type: 'radar',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: '學生表現 (PR)',
-          data: data,
-          spanGaps: true,
-          fill: true,
-          backgroundColor: 'rgba(37, 99, 235, 0.25)',
-          borderColor: 'rgb(37, 99, 235)',
-          pointBackgroundColor: 'rgb(30, 58, 138)',
-          pointBorderColor: '#fff',
-          pointHoverBackgroundColor: '#fff',
-          pointHoverBorderColor: 'rgb(37, 99, 235)'
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: { r: { suggestedMin: 0, suggestedMax: 100, ticks: { stepSize: 20 } } }
-      }
+      data: { labels: [], datasets: [{
+        label: '學生表現 (PR)', data: [], spanGaps: true, fill: true,
+        backgroundColor: 'rgba(37,99,235,0.25)', borderColor: 'rgb(37,99,235)',
+        pointBackgroundColor: 'rgb(30,58,138)', pointBorderColor: '#fff'
+      }]},
+      options: { responsive: true,
+        scales: { r: { suggestedMin: 0, suggestedMax: 100, ticks: { stepSize: 20 } } } }
     });
+
+    function render(values, timeText) {
+      chart.data.labels = BASE.map(i => values[i.key] == null ? `${i.label}（未檢測）` : `${i.label} PR`);
+      chart.data.datasets[0].data = BASE.map(i => values[i.key]);
+      chart.update();
+
+      const missing = BASE.filter(i => values[i.key] == null).map(i => i.label);
+      document.getElementById('note').innerText =
+        missing.length ? `${missing.join('、')}未檢測或無常模，未列入圖形。` : '';
+      document.getElementById('timeLabel').innerText = timeText ? `🕒 檢測時間：${timeText}` : '';
+    }
+
+    // 先畫網址帶來的本次成績
+    render({
+      flex: readPR('flex'), muscle: readPR('muscle'),
+      power: readPR('power'), cardio: readPR('cardio')
+    }, '');
+
+    // ===== 歷次檢測（失敗不影響關閉功能）=====
+    if (sid && GAS_URL.startsWith('http')) {
+      fetch(`${GAS_URL}?action=history&sid=${encodeURIComponent(sid)}`)
+        .then(r => r.json())
+        .then(data => {
+          const recs = (data && data.records) || [];
+          if (recs.length === 0) return;
+
+          const list = document.getElementById('historyList');
+          recs.forEach((rec, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'rec' + (idx === 0 ? ' active' : '');
+            btn.innerHTML =
+              `<span>${rec.time || '—（舊資料無時間）'}<br><small>${rec.grade}</small></span>` +
+              `<small>BMI ${rec.bmi}</small>`;
+            btn.addEventListener('click', () => {
+              document.querySelectorAll('.rec').forEach(b => b.classList.remove('active'));
+              btn.classList.add('active');
+              render(rec, rec.time);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+            list.appendChild(btn);
+          });
+          document.getElementById('historyCard').style.display = 'block';
+
+          render(recs[0], recs[0].time);
+        })
+        .catch(err => console.log('讀取歷次紀錄失敗：', err));
+    }
   </script>
 </body>
 </html>

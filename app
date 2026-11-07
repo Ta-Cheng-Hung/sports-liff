@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>體適能檢測</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<style>
+  :root { --blue:#0369a1; --dark:#0c4a6e; --bg:#f0f7fc; --line:#dbe7f0; --mute:#64748b; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC",sans-serif; background:var(--bg); color:#1e293b; }
+  header { background:linear-gradient(135deg,var(--dark),var(--blue)); color:#fff; padding:22px 20px 26px; border-radius:0 0 28px 28px; }
+  header h1 { margin:0; font-size:22px; }
+  header p { margin:4px 0 0; font-size:13px; opacity:.85; }
+  nav { display:flex; gap:8px; padding:14px 16px 0; overflow-x:auto; }
+  nav button { flex:1; min-width:84px; padding:11px 8px; border:0; border-radius:14px; background:#fff; color:#334155; font-size:14px; font-weight:600; }
+  nav button.on { background:var(--blue); color:#fff; }
+  main { padding:14px 16px 90px; max-width:520px; margin:0 auto; }
+  .box { background:#fff; border-radius:18px; padding:20px; margin-bottom:14px; }
+  h2 { margin:0 0 12px; font-size:17px; color:var(--dark); }
+  label { display:block; font-size:13px; color:var(--mute); margin:12px 0 4px; }
+  input { width:100%; padding:12px; border:1px solid var(--line); border-radius:12px; font-size:16px; }
+  .primary { width:100%; margin-top:16px; padding:14px; border:0; border-radius:12px; background:var(--blue); color:#fff; font-size:16px; font-weight:700; }
+  .rec { display:flex; justify-content:space-between; width:100%; padding:12px; margin-bottom:8px; border:1px solid var(--line); border-radius:12px; background:#fff; text-align:left; font-size:14px; }
+  .rec.on { border-color:var(--blue); background:#eff8ff; }
+  .rec small { color:var(--mute); }
+  .err { color:#b91c1c; font-size:14px; margin-top:10px; }
+  .muted { color:var(--mute); font-size:13px; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th,td { padding:8px 4px; border-bottom:1px solid var(--line); text-align:center; }
+  .scroll { overflow-x:auto; }
+  .seg { display:flex; gap:6px; margin-bottom:12px; }
+  .seg button { flex:1; padding:8px; border:1px solid var(--line); border-radius:10px; background:#fff; }
+  .seg button.on { background:var(--blue); color:#fff; border-color:var(--blue); }
+  #closeBar { position:fixed; left:0; right:0; bottom:0; padding:10px 16px calc(10px + env(safe-area-inset-bottom)); background:linear-gradient(transparent,var(--bg) 40%); }
+  #closeBtn { width:100%; max-width:520px; display:block; margin:0 auto; padding:14px; border:0; border-radius:12px; background:#334155; color:#fff; font-size:16px; font-weight:700; }
+  button:focus-visible,input:focus-visible { outline:3px solid #7dd3fc; outline-offset:2px; }
+</style>
+</head>
+<body>
+<header><h1 id="hTitle">體適能檢測</h1><p id="hSub">載入中…</p></header>
+<nav id="nav" hidden>
+  <button data-p="home">我的成績</button>
+  <button data-p="history">檢測紀錄</button>
+  <button data-p="profile">個人資料</button>
+</nav>
+<main id="view"></main>
+<div id="closeBar"><button id="closeBtn">關閉，回到 LINE</button></div>
+
+<script>
+const LIFF_ID = "請填入新的 LIFF ID";
+const GAS_URL = "請填入 Apps Script 網頁應用程式網址（結尾 /exec）";
+const AXES = [["flex","柔軟度"],["muscle","肌耐力"],["power","瞬發力"],["cardio","心肺耐力"]];
+const $ = id => document.getElementById(id);
+let state = { me:null, records:[], raws:[], page:"home", sel:0, chart:null };
+
+document.getElementById('closeBtn').onclick = () => {
+  try { if (liff.isInClient()) { liff.closeWindow(); return; } } catch(e) {}
+  alert("目前不是在 LINE 內開啟，無法返回 LINE。");
+};
+
+async function api(action, data) {
+  const res = await fetch(GAS_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({ action, idToken: liff.getIDToken(), ...data })
+  });
+  return res.json();
+}
+
+async function main() {
+  try {
+    await liff.init({ liffId: LIFF_ID });
+    if (!liff.isLoggedIn()) { liff.login({ redirectUri: location.href }); return; }
+    const q = new URLSearchParams(location.search).get("page");
+    if (q) state.page = q;
+    const r = await api("me", {});
+    if (!r.ok) return fail(r.error);
+    if (!r.bound) return showBind();
+    state.me = r.me;
+    await loadRecords();
+  } catch (e) { fail("無法連線：" + e.message); }
+}
+
+function fail(msg) { $("hSub").textContent = ""; $("view").innerHTML = `<div class="box err">${msg}</div>`; }
+
+function showBind(msg) {
+  $("hTitle").textContent = "綁定學生身分"; $("hSub").textContent = "第一次使用，請先綁定";
+  $("nav").hidden = true;
+  $("view").innerHTML = `<div class="box"><h2>輸入學號與生日</h2>
+    <label>學號</label><input id="bSid" autocomplete="off">
+    <label>生日</label><input id="bBir" type="date">
+    <button class="primary" id="bBtn">綁定</button>
+    <div class="err" id="bErr">${msg || ""}</div></div>`;
+  $("bBtn").onclick = async () => {
+    $("bBtn").disabled = true;
+    const r = await api("bind", { studentId: $("bSid").value, birthday: $("bBir").value });
+    if (r.ok) return main();
+    $("bBtn").disabled = false; $("bErr").textContent = r.error;
+  };
+}
+
+async function loadRecords() {
+  const r = await api("record.list", {});
+  if (!r.ok) return fail(r.error);
+  state.me = r.me; state.records = r.records; state.raws = r.raws;
+  $("hTitle").textContent = `${r.me.name} 的體適能`; $("hSub").textContent = `學號 ${r.me.studentId}`;
+  $("nav").hidden = false;
+  document.querySelectorAll("#nav button").forEach(b => b.onclick = () => go(b.dataset.p));
+  go(state.page);
+}
+
+function go(p) {
+  state.page = p;
+  document.querySelectorAll("#nav button").forEach(b => b.classList.toggle("on", b.dataset.p === p));
+  ({ home, history: historyPage, profile }[p] || home)();
+}
+
+function home() {
+  const recs = state.records;
+  if (!recs.length) { $("view").innerHTML = `<div class="box"><h2>尚無檢測紀錄</h2><p class="muted">有檢測結果後會顯示在這裡。</p></div>`; return; }
+  const r = recs[0];
+  $("view").innerHTML = `<div class="box"><h2>最新檢測</h2><p class="muted">${r.time || "（舊資料無時間）"}　BMI ${r.bmi}</p>
+    <canvas id="cv"></canvas><p class="muted" id="miss"></p><p><b>${r.grade}</b></p>
+    <p class="muted">${r.advice}</p></div>`;
+  radar(r);
+}
+
+function radar(r) {
+  if (state.chart) state.chart.destroy();
+  state.chart = new Chart($("cv"), {
+    type: "radar",
+    data: { labels: AXES.map(([k,l]) => r[k] == null ? `${l}（未檢測）` : l),
+      datasets: [{ label: "PR", data: AXES.map(([k]) => r[k]), spanGaps: true,
+        backgroundColor: "rgba(3,105,161,.22)", borderColor: "#0369a1", pointBackgroundColor: "#0c4a6e" }] },
+    options: { plugins: { legend: { display: false } }, scales: { r: { suggestedMin: 0, suggestedMax: 100, ticks: { stepSize: 20 } } } }
+  });
+}
+
+function historyPage() {
+  $("view").innerHTML = `<div class="seg"><button data-v="trend" class="on">成績趨勢</button><button data-v="raw">原始數據</button></div><div id="hv"></div>`;
+  document.querySelectorAll(".seg button").forEach(b => b.onclick = () => {
+    document.querySelectorAll(".seg button").forEach(x => x.classList.toggle("on", x === b));
+    b.dataset.v === "raw" ? rawView() : trendView();
+  });
+  trendView();
+}
+
+function trendView() {
+  const recs = state.records;
+  if (!recs.length) { $("hv").innerHTML = `<div class="box muted">尚無檢測紀錄</div>`; return; }
+  $("hv").innerHTML = `<div class="box"><canvas id="cv"></canvas><p class="muted" id="when"></p></div><div id="list"></div>`;
+  const show = i => {
+    document.querySelectorAll(".rec").forEach((b, j) => b.classList.toggle("on", i === j));
+    $("when").textContent = recs[i].time || "（舊資料無時間）";
+    radar(recs[i]);
+  };
+  recs.forEach((r, i) => {
+    const b = document.createElement("button");
+    b.className = "rec";
+    b.innerHTML = `<span>${r.time || "—（舊資料無時間）"}<br><small>${r.grade}</small></span><small>BMI ${r.bmi}</small>`;
+    b.onclick = () => show(i);
+    $("list").appendChild(b);
+  });
+  show(0);
+}
+
+function rawView() {
+  const rows = state.raws;
+  if (!rows.length) { $("hv").innerHTML = `<div class="box muted">尚無原始數據</div>`; return; }
+  $("hv").innerHTML = `<div class="box scroll"><table><tr><th>時間</th><th>身高</th><th>體重</th><th>前彎</th><th>仰臥</th><th>跳遠</th><th>體力</th></tr>${
+    rows.map(r => `<tr><td>${r.time}</td><td>${r.height}</td><td>${r.weight}</td><td>${r.flex}</td><td>${r.muscle}</td><td>${r.power}</td><td>${r.cardio}</td></tr>`).join("")
+  }</table></div>`;
+}
+
+function profile() {
+  const m = state.me;
+  $("view").innerHTML = `<div class="box"><h2>個人資料</h2>
+    <p>姓名：${m.name}</p><p>學號：${m.studentId}</p><p>性別：${m.gender || "—"}</p><p>身分：${m.role}</p>
+    <p class="muted">資料修改功能將於下一階段加入。</p></div>`;
+}
+
+main();
+</script>
+</body>
+</html>

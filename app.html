@@ -184,7 +184,12 @@ function profile() {
   const m = state.me;
   $("view").innerHTML = `<div class="box"><h2>個人資料</h2>
     <p>姓名：${m.name}</p><p>學號：${m.studentId}</p><p>性別：${m.gender || "—"}</p><p>身分：${m.role}</p>
-    <p class="muted">資料修改功能將於下一階段加入。</p></div>`;
+    <button class="primary" id="reBind" style="background:#b91c1c">解除綁定，重新綁定其他學號</button></div>`;
+  $("reBind").onclick = async () => {
+    if (!confirm("確定要解除目前的綁定嗎？")) return;
+    const r = await api("unbind", {});
+    if (r.ok) { state.page = "home"; main(); } else alert(r.error || "解除失敗");
+  };
 }
 
 main();

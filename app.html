@@ -84,7 +84,11 @@ async function main() {
   } catch (e) { fail("無法連線：" + e.message); }
 }
 
-function fail(msg) { $("hSub").textContent = ""; $("view").innerHTML = `<div class="box err">${msg}</div>`; }
+function fail(msg) {
+  $("hSub").textContent = "";
+  $("view").innerHTML = `<div class="box err">${msg || "後端回應異常，請確認 Apps Script 已部署新版本"}</div>`;
+}
+
 
 function showBind(msg) {
   $("hTitle").textContent = "綁定學生身分"; $("hSub").textContent = "第一次使用，請先綁定";

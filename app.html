@@ -77,7 +77,7 @@ async function main() {
     const q = new URLSearchParams(location.search).get("page");
     if (q) state.page = q;
     const r = await api("me", {});
-    if (!r.ok) return fail(r.error);
+    if (!r.ok) return fail(r.error || JSON.stringify(r));
     if (!r.bound) return showBind();
     state.me = r.me;
     await loadRecords();

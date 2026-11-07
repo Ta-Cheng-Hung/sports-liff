@@ -78,6 +78,7 @@ async function main() {
     const q = new URLSearchParams(location.search).get("page");
     if (q) state.page = q;
     const r = await api("me", {});
+    $("closeBtn").textContent = "關閉，回到 LINE（後端 " + (r.v || "舊版") + "）";
    if (!r.ok) return fail(r.error || "後端原始回應：" + JSON.stringify(r));
     if (!r.bound) return showBind();
     state.me = r.me;

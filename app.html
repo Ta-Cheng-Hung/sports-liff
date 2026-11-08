@@ -37,6 +37,10 @@
   .seg button.on { background:var(--blue); color:#fff; border-color:var(--blue); }
   .mini { padding:6px 10px; border:1px solid var(--line); border-radius:8px; background:#fff; font-size:13px; }
   .mini.del { color:#b91c1c; border-color:#fecaca; }
+  .bub { padding:10px 12px; border-radius:12px; margin:8px 0; font-size:15px; white-space:pre-wrap; line-height:1.6; }
+  .bub.u { background:#e0f2fe; margin-left:28px; } .bub.a { background:#f1f5f9; margin-right:28px; } .bub.e { background:#fee2e2; color:#b91c1c; margin-right:28px; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
+  .chip { padding:8px 12px; border:1px solid var(--line); border-radius:999px; background:#fff; font-size:13px; color:var(--dark); }
   .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
   #closeBar { position:fixed; left:0; right:0; bottom:0; padding:10px 16px calc(10px + env(safe-area-inset-bottom)); background:linear-gradient(transparent,var(--bg) 40%); }
   #closeBtn { width:100%; max-width:520px; display:block; margin:0 auto; padding:14px; border:0; border-radius:12px; background:#334155; color:#fff; font-size:16px; font-weight:700; }
@@ -49,6 +53,7 @@
   <button data-p="home">我的成績</button>
   <button data-p="input">輸入檢測</button>
   <button data-p="history">檢測紀錄</button>
+  <button data-p="qa">體適能QA</button>
   <button data-p="profile">基本資料</button>
 </nav>
 <div id="who" hidden></div>
@@ -57,11 +62,11 @@
 
 <script>
 const LIFF_ID = "2012441184-lIFb8L41";
-const GAS_URL = "https://script.google.com/macros/s/AKfycbzAjDt8QqUyg-HHxbx_avfYzrk6YjCj0O3B2pwOV0YjAQff8vd9wn94Y4CbCTGIhlH8/exec";
+const GAS_URL = "請填入 Apps Script 網頁應用程式網址（結尾 /exec）";
 const AXES = [["flex","柔軟度"],["muscle","肌耐力"],["power","瞬發力"],["cardio","心肺耐力"]];
 const $ = id => document.getElementById(id);
 const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-let S = { me:null, target:"", students:[], records:[], raws:[], page:"home", edit:null, chart:null, v:"", keep:"" };
+let S = { me:null, target:"", students:[], records:[], raws:[], page:"home", edit:null, chart:null, v:"", keep:"", chat:[] };
 
 $("closeBtn").onclick = () => {
   try { if (liff.isInClient()) { liff.closeWindow(); return; } } catch (e) {}
@@ -81,7 +86,7 @@ async function main() {
     await liff.init({ liffId: LIFF_ID });
     if (!liff.isLoggedIn()) { liff.login({ redirectUri: location.href }); return; }
     const q = new URLSearchParams(location.search).get("page");
-    if (["home","input","history","profile"].includes(q)) S.page = q;
+    if (["home","input","history","qa","profile"].includes(q)) S.page = q;
     const r = await api("me", {});
     if (!r.ok) return fail(r.error || "後端原始回應：" + JSON.stringify(r));
     if (!r.bound) return showBind();
@@ -130,7 +135,7 @@ async function load() {
   if (S.me.role === "教師") {
     $("who").hidden = false;
     $("who").innerHTML = `<select id="whoSel">${S.students.map(s => `<option value="${esc(s.studentId)}" ${s.studentId === S.target ? "selected" : ""}>${esc(s.studentId)} ${esc(s.name)}</option>`).join("")}</select>`;
-    $("whoSel").onchange = async e => { S.target = e.target.value; S.edit = null; await load(); };
+    $("whoSel").onchange = async e => { S.target = e.target.value; S.edit = null; S.chat = []; await load(); };
   }
   go(S.page);
 }
@@ -138,7 +143,7 @@ async function load() {
 function go(p) {
   S.page = p;
   document.querySelectorAll("#nav button").forEach(b => b.classList.toggle("on", b.dataset.p === p));
-  ({ home, input: inputPage, history: historyPage, profile }[p] || home)();
+  ({ home, input: inputPage, history: historyPage, qa: qaPage, profile }[p] || home)();
 }
 
 function radar(r) {
@@ -153,8 +158,9 @@ function home() {
   const r = S.records[0];
   if (!r) { $("view").innerHTML = `<div class="box"><h2>尚無檢測紀錄</h2><p class="muted">到「輸入檢測」新增第一筆。</p></div>`; return; }
   $("view").innerHTML = `<div class="box"><h2>最新檢測</h2><p class="muted">${esc(r.time || "（舊資料無時間）")}　BMI ${esc(r.bmi)}</p>
-    <canvas id="cv"></canvas><p><b>${esc(r.grade)}</b></p><p class="muted">${esc(r.advice)}</p></div>`;
+    <canvas id="cv"></canvas><p><b>${esc(r.grade)}</b></p><p class="muted">${esc(r.advice)}</p><div id="acts" style="margin-top:10px"></div></div><div id="hMsg"></div>`;
   radar(r);
+  actions(r);
 }
 
 function inputPage() {
@@ -188,12 +194,34 @@ function historyPage() {
   trendView();
 }
 
+function editById(id) { const x = S.raws.find(r => r.id === id); if (!x) return; S.edit = x; go("input"); }
+
+function bindDelete(b, id, label) {
+  let armed = false;
+  b.onclick = async () => {
+    if (!armed) { armed = true; b.textContent = "再按一次確認刪除"; return; }
+    b.disabled = true;
+    const r = await api("record.delete", { id });
+    if (!r.ok) { b.disabled = false; armed = false; b.textContent = label; if ($("hMsg")) $("hMsg").innerHTML = `<p class="err">${esc(r.error)}</p>`; return; }
+    await load();
+  };
+}
+
+function actions(r) {
+  $("acts").innerHTML = r.id
+    ? `<button class="mini" id="aEdit">修改這筆</button> <button class="mini del" id="aDel">刪除這筆</button>`
+    : `<span class="muted">改版前由表單輸入的舊資料，無法在這裡修改或刪除。</span>`;
+  if (r.id) { $("aEdit").onclick = () => editById(r.id); bindDelete($("aDel"), r.id, "刪除這筆"); }
+}
+
 function trendView() {
   const recs = S.records;
   if (!recs.length) { $("hv").innerHTML = `<div class="box muted">尚無檢測紀錄</div>`; return; }
-  $("hv").innerHTML = `<div class="box"><canvas id="cv"></canvas><p class="muted" id="when"></p></div><div id="list"></div>`;
-  const show = i => { document.querySelectorAll(".rec").forEach((b, j) => b.classList.toggle("on", i === j));
-    $("when").textContent = recs[i].time || "（舊資料無時間）"; radar(recs[i]); };
+  $("hv").innerHTML = `<div class="box"><canvas id="cv"></canvas><p class="muted" id="when"></p><div id="acts"></div></div><div id="list"></div><div id="hMsg"></div>`;
+  const show = i => {
+    document.querySelectorAll(".rec").forEach((b, j) => b.classList.toggle("on", i === j));
+    $("when").textContent = recs[i].time || "（舊資料無時間）"; radar(recs[i]); actions(recs[i]);
+  };
   recs.forEach((r, i) => { const b = document.createElement("button"); b.className = "rec";
     b.innerHTML = `<span>${esc(r.time || "—（舊資料無時間）")}<br><small>${esc(r.grade)}</small></span><small>BMI ${esc(r.bmi)}</small>`;
     b.onclick = () => show(i); $("list").appendChild(b); });
@@ -201,21 +229,46 @@ function trendView() {
 }
 
 function rawView() {
-  const rows = S.raws;
+  const rows = S.raws, v = x => (x === "" || x == null ? "—" : esc(x));
   if (!rows.length) { $("hv").innerHTML = `<div class="box muted">尚無原始數據</div>`; return; }
-  $("hv").innerHTML = `<div class="box scroll"><table><tr><th>日期</th><th>身高</th><th>體重</th><th>前彎</th><th>仰臥</th><th>跳遠</th><th>體力</th><th>操作</th></tr>${
-    rows.map(r => `<tr><td>${esc(r.time)}</td><td>${esc(r.height)}</td><td>${esc(r.weight)}</td><td>${esc(r.flex)}</td><td>${esc(r.muscle)}</td><td>${esc(r.power)}</td><td>${esc(r.cardio)}</td><td>${
-      r.id ? `<button class="mini" data-e="${esc(r.id)}">修改</button> <button class="mini del" data-d="${esc(r.id)}">刪除</button>` : `<span class="muted">舊資料</span>`}</td></tr>`).join("")
-  }</table></div><div id="hMsg"></div>`;
-  document.querySelectorAll("[data-e]").forEach(b => b.onclick = () => { S.edit = S.raws.find(x => x.id === b.dataset.e); go("input"); });
-  document.querySelectorAll("[data-d]").forEach(b => { let armed = false;
-    b.onclick = async () => {
-      if (!armed) { armed = true; b.textContent = "確定刪除"; return; }
-      b.disabled = true;
-      const r = await api("record.delete", { id: b.dataset.d });
-      if (!r.ok) { b.disabled = false; $("hMsg").innerHTML = `<p class="err">${esc(r.error)}</p>`; return; }
-      S.page = "history"; await load();
-    }; });
+  $("hv").innerHTML = rows.map(r => `<div class="box"><b>${esc(r.time)}</b>
+    <div class="grid2 muted" style="margin-top:8px"><span>身高 ${v(r.height)}</span><span>體重 ${v(r.weight)}</span><span>坐姿體前彎 ${v(r.flex)}</span><span>仰臥起坐 ${v(r.muscle)}</span><span>立定跳遠 ${v(r.power)}</span><span>體力指數 ${v(r.cardio)}</span></div>
+    <div style="margin-top:12px">${r.id ? `<button class="mini" data-e="${esc(r.id)}">修改</button> <button class="mini del" data-d="${esc(r.id)}">刪除</button>` : `<span class="muted">改版前由表單輸入的舊資料，無法修改</span>`}</div></div>`).join("") + `<div id="hMsg"></div>`;
+  document.querySelectorAll("[data-e]").forEach(b => b.onclick = () => editById(b.dataset.e));
+  document.querySelectorAll("[data-d]").forEach(b => bindDelete(b, b.dataset.d, "刪除"));
+}
+
+const QA_TIPS = ["我的弱項要怎麼加強？", "一週的運動怎麼安排？", "怎麼提升心肺耐力？", "BMI 偏高該怎麼調整？"];
+
+function renderChat() {
+  $("chat").innerHTML = S.chat.map(m => `<div class="bub ${m.role === "user" ? "u" : m.err ? "e" : "a"}">${esc(m.text)}</div>`).join("");
+  window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+}
+
+function qaPage() {
+  const who = S.target === S.me.studentId ? "你" : "這位學生";
+  $("view").innerHTML = `<div class="box"><h2>體適能 QA</h2>
+    <p class="muted">AI 教練會參考${who}最近一次的檢測結果回答，內容僅供運動參考，不是醫療建議。</p>
+    <div id="chat"></div>
+    <div class="chips">${QA_TIPS.map(t => `<button class="chip">${t}</button>`).join("")}</div>
+    <input id="qIn" maxlength="300" placeholder="輸入你的問題">
+    <button class="primary" id="qSend">送出</button></div>`;
+  renderChat();
+  document.querySelectorAll(".chip").forEach(c => c.onclick = () => qaSend(c.textContent));
+  $("qSend").onclick = () => qaSend($("qIn").value);
+  $("qIn").onkeydown = e => { if (e.key === "Enter") qaSend($("qIn").value); };
+}
+
+async function qaSend(text) {
+  text = String(text || "").trim();
+  if (!text || $("qSend").disabled) return;
+  const history = S.chat.filter(m => !m.err).slice(-6);
+  S.chat.push({ role: "user", text }); S.chat.push({ role: "ai", text: "思考中…" });
+  $("qIn").value = ""; $("qSend").disabled = true; renderChat();
+  const r = await api("qa.ask", { studentId: S.target, question: text, history });
+  S.chat.pop();
+  S.chat.push(r.ok ? { role: "ai", text: r.answer } : { role: "ai", text: r.error || "發生錯誤，請稍後再試", err: true });
+  if ($("qSend")) { $("qSend").disabled = false; renderChat(); }
 }
 
 async function profile() {

@@ -12,63 +12,68 @@
   [hidden] { display:none !important; }
   body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC",sans-serif; background:var(--bg); color:#1e293b; }
   header { background:linear-gradient(135deg,var(--dark),var(--blue)); color:#fff; padding:22px 20px 26px; border-radius:0 0 28px 28px; }
-  header h1 { margin:0; font-size:22px; }
-  header p { margin:4px 0 0; font-size:13px; opacity:.85; }
+  header h1 { margin:0; font-size:22px; } header p { margin:4px 0 0; font-size:13px; opacity:.85; }
   nav { display:flex; gap:8px; padding:14px 16px 0; overflow-x:auto; }
-  nav button { flex:1; min-width:84px; padding:11px 8px; border:0; border-radius:14px; background:#fff; color:#334155; font-size:14px; font-weight:600; }
+  nav button { flex:1; min-width:78px; padding:11px 6px; border:0; border-radius:14px; background:#fff; color:#334155; font-size:14px; font-weight:600; }
   nav button.on { background:var(--blue); color:#fff; }
+  #who { padding:12px 16px 0; }
   main { padding:14px 16px 90px; max-width:520px; margin:0 auto; }
   .box { background:#fff; border-radius:18px; padding:20px; margin-bottom:14px; }
   h2 { margin:0 0 12px; font-size:17px; color:var(--dark); }
   label { display:block; font-size:13px; color:var(--mute); margin:12px 0 4px; }
-  input { width:100%; padding:12px; border:1px solid var(--line); border-radius:12px; font-size:16px; }
-  input[type=date] { -webkit-appearance:none; appearance:none; display:block; min-height:48px; max-width:100%; background:#fff; color:#1e293b; }
+  input,select { width:100%; min-height:48px; padding:12px; border:1px solid var(--line); border-radius:12px; font-size:16px; background:#fff; color:#1e293b; -webkit-appearance:none; appearance:none; display:block; }
   .primary { width:100%; margin-top:16px; padding:14px; border:0; border-radius:12px; background:var(--blue); color:#fff; font-size:16px; font-weight:700; }
+  .danger { background:#b91c1c; }
   .rec { display:flex; justify-content:space-between; width:100%; padding:12px; margin-bottom:8px; border:1px solid var(--line); border-radius:12px; background:#fff; text-align:left; font-size:14px; }
   .rec.on { border-color:var(--blue); background:#eff8ff; }
-  .rec small { color:var(--mute); }
+  .rec small,.muted { color:var(--mute); font-size:13px; }
   .err { color:#b91c1c; font-size:14px; margin-top:10px; }
-  .muted { color:var(--mute); font-size:13px; }
+  .ok { color:#15803d; font-size:14px; margin-top:10px; }
   table { width:100%; border-collapse:collapse; font-size:13px; }
-  th,td { padding:8px 4px; border-bottom:1px solid var(--line); text-align:center; }
+  th,td { padding:8px 4px; border-bottom:1px solid var(--line); text-align:center; white-space:nowrap; }
   .scroll { overflow-x:auto; }
   .seg { display:flex; gap:6px; margin-bottom:12px; }
-  .seg button { flex:1; padding:8px; border:1px solid var(--line); border-radius:10px; background:#fff; }
+  .seg button { flex:1; padding:10px; border:1px solid var(--line); border-radius:10px; background:#fff; }
   .seg button.on { background:var(--blue); color:#fff; border-color:var(--blue); }
+  .mini { padding:6px 10px; border:1px solid var(--line); border-radius:8px; background:#fff; font-size:13px; }
+  .mini.del { color:#b91c1c; border-color:#fecaca; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
   #closeBar { position:fixed; left:0; right:0; bottom:0; padding:10px 16px calc(10px + env(safe-area-inset-bottom)); background:linear-gradient(transparent,var(--bg) 40%); }
   #closeBtn { width:100%; max-width:520px; display:block; margin:0 auto; padding:14px; border:0; border-radius:12px; background:#334155; color:#fff; font-size:16px; font-weight:700; }
-  button:focus-visible,input:focus-visible { outline:3px solid #7dd3fc; outline-offset:2px; }
+  button:focus-visible,input:focus-visible,select:focus-visible { outline:3px solid #7dd3fc; outline-offset:2px; }
 </style>
 </head>
 <body>
 <header><h1 id="hTitle">體適能檢測</h1><p id="hSub">載入中…</p></header>
 <nav id="nav" hidden>
   <button data-p="home">我的成績</button>
+  <button data-p="input">輸入檢測</button>
   <button data-p="history">檢測紀錄</button>
-  <button data-p="profile">個人資料</button>
+  <button data-p="profile">基本資料</button>
 </nav>
+<div id="who" hidden></div>
 <main id="view"></main>
 <div id="closeBar"><button id="closeBtn">關閉，回到 LINE</button></div>
 
 <script>
 const LIFF_ID = "2012441184-lIFb8L41";
-const GAS_URL = "https://script.google.com/macros/s/AKfycbwYOF75Uk8Yxw7y_OJ-UjQTC4y4zc_YQHdHMdDomCq3hYnGefs2N8_0MfreCD2vA8N5/exec";
+const GAS_URL = "請填入 Apps Script 網頁應用程式網址（結尾 /exec）";
 const AXES = [["flex","柔軟度"],["muscle","肌耐力"],["power","瞬發力"],["cardio","心肺耐力"]];
 const $ = id => document.getElementById(id);
-let state = { me:null, records:[], raws:[], page:"home", sel:0, chart:null };
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let S = { me:null, target:"", students:[], records:[], raws:[], page:"home", edit:null, chart:null, v:"", keep:"" };
 
-document.getElementById('closeBtn').onclick = () => {
-  try { if (liff.isInClient()) { liff.closeWindow(); return; } } catch(e) {}
+$("closeBtn").onclick = () => {
+  try { if (liff.isInClient()) { liff.closeWindow(); return; } } catch (e) {}
   alert("目前不是在 LINE 內開啟，無法返回 LINE。");
 };
 
 async function api(action, data) {
-  const res = await fetch(GAS_URL, {
-    method: "POST",
-    headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify({ action, idToken: liff.getIDToken(), ...data })
-  });
-  return res.json();
+  const res = await fetch(GAS_URL, { method:"POST", headers:{ "Content-Type":"text/plain;charset=utf-8" },
+    body: JSON.stringify({ action, idToken: liff.getIDToken(), ...data }) });
+  const r = await res.json();
+  if (r && r.v) S.v = r.v;
+  return r;
 }
 
 async function main() {
@@ -76,73 +81,102 @@ async function main() {
     await liff.init({ liffId: LIFF_ID });
     if (!liff.isLoggedIn()) { liff.login({ redirectUri: location.href }); return; }
     const q = new URLSearchParams(location.search).get("page");
-    if (q) state.page = q;
+    if (["home","input","history","profile"].includes(q)) S.page = q;
     const r = await api("me", {});
-    $("closeBtn").textContent = "關閉，回到 LINE（後端 " + (r.v || "舊版") + "）";
-   if (!r.ok) return fail(r.error || "後端原始回應：" + JSON.stringify(r));
+    if (!r.ok) return fail(r.error || "後端原始回應：" + JSON.stringify(r));
     if (!r.bound) return showBind();
-    state.me = r.me;
-    await loadRecords();
+    S.me = r.me; S.target = (S.keep && r.me.role === "教師") ? S.keep : r.me.studentId; S.keep = "";
+    if (r.me.role === "教師") { const s = await api("student.list", {}); S.students = s.students || []; }
+    await load();
   } catch (e) { fail("無法連線：" + e.message); }
 }
 
-function fail(msg) {
-  $("hSub").textContent = "";
-  $("view").innerHTML = `<div class="box err">${msg || "後端回應異常，請確認 Apps Script 已部署新版本"}</div>`;
-}
+function fail(msg) { $("hSub").textContent = ""; $("view").innerHTML = `<div class="box err">${esc(msg)}</div>`; }
 
+const gsel = (id, g) => `<select id="${id}"><option value="">請選擇</option><option ${String(g).startsWith("男") ? "selected" : ""}>男</option><option ${String(g).startsWith("女") ? "selected" : ""}>女</option></select>`;
 
-function showBind(msg) {
-  $("hTitle").textContent = "綁定學生身分"; $("hSub").textContent = "第一次使用，請先綁定";
-  $("nav").hidden = true;
-  $("view").innerHTML = `<div class="box"><h2>輸入學號與生日</h2>
-    <label>學號</label><input id="bSid" autocomplete="off">
-    <label>生日</label><input id="bBir" type="date">
-    <button class="primary" id="bBtn">綁定</button>
-    <div class="err" id="bErr">${msg || ""}</div></div>`;
-  $("bBtn").onclick = async () => {
+function showBind(msg, mode) {
+  mode = mode || "bind";
+  $("hTitle").textContent = "學生資料"; $("hSub").textContent = "第一次使用，請先綁定或建立資料";
+  $("nav").hidden = true; $("who").hidden = true;
+  const seg = `<div class="seg"><button data-m="bind" class="${mode === "bind" ? "on" : ""}">綁定既有學號</button><button data-m="reg" class="${mode === "reg" ? "on" : ""}">建立我的資料</button></div>`;
+  const form = mode === "bind"
+    ? `<div class="box"><h2>輸入學號與生日</h2><label>學號</label><input id="bSid" autocomplete="off"><label>生日</label><input id="bBir" type="date"><button class="primary" id="bBtn">綁定</button><div class="err" id="bErr">${esc(msg || "")}</div></div>`
+    : `<div class="box"><h2>建立我的資料</h2><label>學號</label><input id="rSid" autocomplete="off"><label>姓名</label><input id="rName"><label>班級／系級</label><input id="rDept"><label>性別</label>${gsel("rGender", "")}<label>生日</label><input id="rBir" type="date"><button class="primary" id="rBtn">建立並綁定</button><div class="err" id="rErr">${esc(msg || "")}</div></div>`;
+  $("view").innerHTML = seg + form;
+  document.querySelectorAll(".seg button").forEach(b => b.onclick = () => showBind("", b.dataset.m));
+  if (mode === "bind") $("bBtn").onclick = async () => {
     $("bBtn").disabled = true;
     const r = await api("bind", { studentId: $("bSid").value, birthday: $("bBir").value });
     if (r.ok) return main();
-    $("bBtn").disabled = false; $("bErr").textContent = r.error;
+    $("bBtn").disabled = false; $("bErr").textContent = r.error || "綁定失敗";
+  };
+  else $("rBtn").onclick = async () => {
+    $("rBtn").disabled = true;
+    const r = await api("register", { studentId: $("rSid").value, name: $("rName").value, dept: $("rDept").value, gender: $("rGender").value, birthday: $("rBir").value });
+    if (r.ok) return main();
+    $("rBtn").disabled = false; $("rErr").textContent = r.error || "建立失敗";
   };
 }
 
-async function loadRecords() {
-  const r = await api("record.list", {});
+async function load() {
+  const r = await api("record.list", { studentId: S.target });
   if (!r.ok) return fail(r.error);
-  state.me = r.me; state.records = r.records; state.raws = r.raws;
-  $("hTitle").textContent = `${r.me.name} 的體適能`; $("hSub").textContent = `學號 ${r.me.studentId}`;
+  S.records = r.records; S.raws = r.raws;
+  $("hTitle").textContent = `${r.target.name} 的體適能`;
+  $("hSub").textContent = `學號 ${r.target.studentId}` + (S.me.role === "教師" ? "　（教師）" : "");
   $("nav").hidden = false;
-  document.querySelectorAll("#nav button").forEach(b => b.onclick = () => go(b.dataset.p));
-  go(state.page);
+  document.querySelectorAll("#nav button").forEach(b => b.onclick = () => { S.edit = null; go(b.dataset.p); });
+  if (S.me.role === "教師") {
+    $("who").hidden = false;
+    $("who").innerHTML = `<select id="whoSel">${S.students.map(s => `<option value="${esc(s.studentId)}" ${s.studentId === S.target ? "selected" : ""}>${esc(s.studentId)} ${esc(s.name)}</option>`).join("")}</select>`;
+    $("whoSel").onchange = async e => { S.target = e.target.value; S.edit = null; await load(); };
+  }
+  go(S.page);
 }
 
 function go(p) {
-  state.page = p;
+  S.page = p;
   document.querySelectorAll("#nav button").forEach(b => b.classList.toggle("on", b.dataset.p === p));
-  ({ home, history: historyPage, profile }[p] || home)();
-}
-
-function home() {
-  const recs = state.records;
-  if (!recs.length) { $("view").innerHTML = `<div class="box"><h2>尚無檢測紀錄</h2><p class="muted">有檢測結果後會顯示在這裡。</p></div>`; return; }
-  const r = recs[0];
-  $("view").innerHTML = `<div class="box"><h2>最新檢測</h2><p class="muted">${r.time || "（舊資料無時間）"}　BMI ${r.bmi}</p>
-    <canvas id="cv"></canvas><p class="muted" id="miss"></p><p><b>${r.grade}</b></p>
-    <p class="muted">${r.advice}</p></div>`;
-  radar(r);
+  ({ home, input: inputPage, history: historyPage, profile }[p] || home)();
 }
 
 function radar(r) {
-  if (state.chart) state.chart.destroy();
-  state.chart = new Chart($("cv"), {
-    type: "radar",
+  if (S.chart) S.chart.destroy();
+  S.chart = new Chart($("cv"), { type:"radar",
     data: { labels: AXES.map(([k,l]) => r[k] == null ? `${l}（未檢測）` : l),
-      datasets: [{ label: "PR", data: AXES.map(([k]) => r[k]), spanGaps: true,
-        backgroundColor: "rgba(3,105,161,.22)", borderColor: "#0369a1", pointBackgroundColor: "#0c4a6e" }] },
-    options: { plugins: { legend: { display: false } }, scales: { r: { suggestedMin: 0, suggestedMax: 100, ticks: { stepSize: 20 } } } }
-  });
+      datasets: [{ label:"PR", data: AXES.map(([k]) => r[k]), spanGaps:true, backgroundColor:"rgba(3,105,161,.22)", borderColor:"#0369a1", pointBackgroundColor:"#0c4a6e" }] },
+    options: { plugins:{ legend:{ display:false } }, scales:{ r:{ suggestedMin:0, suggestedMax:100, ticks:{ stepSize:20 } } } } });
+}
+
+function home() {
+  const r = S.records[0];
+  if (!r) { $("view").innerHTML = `<div class="box"><h2>尚無檢測紀錄</h2><p class="muted">到「輸入檢測」新增第一筆。</p></div>`; return; }
+  $("view").innerHTML = `<div class="box"><h2>最新檢測</h2><p class="muted">${esc(r.time || "（舊資料無時間）")}　BMI ${esc(r.bmi)}</p>
+    <canvas id="cv"></canvas><p><b>${esc(r.grade)}</b></p><p class="muted">${esc(r.advice)}</p></div>`;
+  radar(r);
+}
+
+function inputPage() {
+  const e = S.edit || {}, isEdit = !!e.id, d = new Date();
+  const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  const f = (k, l, u) => `<div><label>${l}${u ? "（" + u + "）" : ""}</label><input id="f_${k}" type="number" inputmode="decimal" step="any" value="${esc(e[k])}"></div>`;
+  $("view").innerHTML = `<div class="box"><h2>${isEdit ? "修改檢測資料" : "新增檢測資料"}</h2>
+    <label>檢測日期</label><input id="f_date" type="date" value="${esc(e.date || today)}">
+    <div class="grid2">${f("height","身高","cm")}${f("weight","體重","kg")}${f("flex","坐姿體前彎","cm")}${f("muscle","仰臥起坐","次")}${f("power","立定跳遠","cm")}${f("cardio","體力指數","")}</div>
+    <p class="muted">身高、體重必填；沒測的項目留空即可。</p>
+    <button class="primary" id="save">${isEdit ? "儲存修改" : "送出檢測資料"}</button>
+    ${isEdit ? `<button class="primary" id="cancel" style="background:#64748b">取消修改</button>` : ""}
+    <div id="msg"></div></div>`;
+  if ($("cancel")) $("cancel").onclick = () => { S.edit = null; go("history"); };
+  $("save").onclick = async () => {
+    const body = { id: e.id || undefined, studentId: S.target, date: $("f_date").value };
+    ["height","weight","flex","muscle","power","cardio"].forEach(k => body[k] = $("f_" + k).value);
+    $("save").disabled = true; $("msg").innerHTML = `<p class="muted">儲存中…</p>`;
+    const r = await api("record.save", body);
+    if (!r.ok) { $("save").disabled = false; $("msg").innerHTML = `<p class="err">${esc(r.error)}</p>`; return; }
+    S.edit = null; S.page = "history"; await load();
+  };
 }
 
 function historyPage() {
@@ -155,42 +189,83 @@ function historyPage() {
 }
 
 function trendView() {
-  const recs = state.records;
+  const recs = S.records;
   if (!recs.length) { $("hv").innerHTML = `<div class="box muted">尚無檢測紀錄</div>`; return; }
   $("hv").innerHTML = `<div class="box"><canvas id="cv"></canvas><p class="muted" id="when"></p></div><div id="list"></div>`;
-  const show = i => {
-    document.querySelectorAll(".rec").forEach((b, j) => b.classList.toggle("on", i === j));
-    $("when").textContent = recs[i].time || "（舊資料無時間）";
-    radar(recs[i]);
-  };
-  recs.forEach((r, i) => {
-    const b = document.createElement("button");
-    b.className = "rec";
-    b.innerHTML = `<span>${r.time || "—（舊資料無時間）"}<br><small>${r.grade}</small></span><small>BMI ${r.bmi}</small>`;
-    b.onclick = () => show(i);
-    $("list").appendChild(b);
-  });
+  const show = i => { document.querySelectorAll(".rec").forEach((b, j) => b.classList.toggle("on", i === j));
+    $("when").textContent = recs[i].time || "（舊資料無時間）"; radar(recs[i]); };
+  recs.forEach((r, i) => { const b = document.createElement("button"); b.className = "rec";
+    b.innerHTML = `<span>${esc(r.time || "—（舊資料無時間）")}<br><small>${esc(r.grade)}</small></span><small>BMI ${esc(r.bmi)}</small>`;
+    b.onclick = () => show(i); $("list").appendChild(b); });
   show(0);
 }
 
 function rawView() {
-  const rows = state.raws;
+  const rows = S.raws;
   if (!rows.length) { $("hv").innerHTML = `<div class="box muted">尚無原始數據</div>`; return; }
-  $("hv").innerHTML = `<div class="box scroll"><table><tr><th>時間</th><th>身高</th><th>體重</th><th>前彎</th><th>仰臥</th><th>跳遠</th><th>體力</th></tr>${
-    rows.map(r => `<tr><td>${r.time}</td><td>${r.height}</td><td>${r.weight}</td><td>${r.flex}</td><td>${r.muscle}</td><td>${r.power}</td><td>${r.cardio}</td></tr>`).join("")
-  }</table></div>`;
+  $("hv").innerHTML = `<div class="box scroll"><table><tr><th>日期</th><th>身高</th><th>體重</th><th>前彎</th><th>仰臥</th><th>跳遠</th><th>體力</th><th>操作</th></tr>${
+    rows.map(r => `<tr><td>${esc(r.time)}</td><td>${esc(r.height)}</td><td>${esc(r.weight)}</td><td>${esc(r.flex)}</td><td>${esc(r.muscle)}</td><td>${esc(r.power)}</td><td>${esc(r.cardio)}</td><td>${
+      r.id ? `<button class="mini" data-e="${esc(r.id)}">修改</button> <button class="mini del" data-d="${esc(r.id)}">刪除</button>` : `<span class="muted">舊資料</span>`}</td></tr>`).join("")
+  }</table></div><div id="hMsg"></div>`;
+  document.querySelectorAll("[data-e]").forEach(b => b.onclick = () => { S.edit = S.raws.find(x => x.id === b.dataset.e); go("input"); });
+  document.querySelectorAll("[data-d]").forEach(b => { let armed = false;
+    b.onclick = async () => {
+      if (!armed) { armed = true; b.textContent = "確定刪除"; return; }
+      b.disabled = true;
+      const r = await api("record.delete", { id: b.dataset.d });
+      if (!r.ok) { b.disabled = false; $("hMsg").innerHTML = `<p class="err">${esc(r.error)}</p>`; return; }
+      S.page = "history"; await load();
+    }; });
 }
 
-function profile() {
-  const m = state.me;
-  $("view").innerHTML = `<div class="box"><h2>個人資料</h2>
-    <p>姓名：${m.name}</p><p>學號：${m.studentId}</p><p>性別：${m.gender || "—"}</p><p>身分：${m.role}</p>
-    <button class="primary" id="reBind" style="background:#b91c1c">解除綁定，重新綁定其他學號</button></div>`;
-  $("reBind").onclick = async () => {
-    if (!confirm("確定要解除目前的綁定嗎？")) return;
-    const r = await api("unbind", {});
-    if (r.ok) { state.page = "home"; main(); } else alert(r.error || "解除失敗");
+async function profile() {
+  $("view").innerHTML = `<div class="box muted">載入中…</div>`;
+  const r = await api("profile.get", { studentId: S.target });
+  if (!r.ok) return fail(r.error);
+  const p = r.profile, T = S.me.role === "教師", self = p.studentId === S.me.studentId;
+  const rsel = (id, v) => `<select id="${id}"><option ${v === "學生" ? "selected" : ""}>學生</option><option ${v === "教師" ? "selected" : ""}>教師</option></select>`;
+  $("view").innerHTML = `<div class="box"><h2>基本資料</h2>
+    <label>學號</label><input id="p_sid" value="${esc(p.studentId)}">
+    <label>姓名</label><input id="p_name" value="${esc(p.name)}">
+    <label>班級／系級</label><input id="p_dept" value="${esc(p.dept)}">
+    <label>性別</label>${gsel("p_gender", p.gender)}
+    <label>生日</label><input id="p_bir" type="date" value="${esc(p.birthday)}">
+    ${T && !self ? `<label>身分</label>${rsel("p_role", p.role)}` : ""}
+    <button class="primary" id="p_save">儲存基本資料</button><div id="p_msg"></div></div>
+    ${T ? `<div class="box"><h2>新增學生</h2>
+      <label>學號</label><input id="n_sid"><label>姓名</label><input id="n_name"><label>班級／系級</label><input id="n_dept">
+      <label>性別</label>${gsel("n_gender", "")}<label>生日</label><input id="n_bir" type="date">
+      <label>身分</label>${rsel("n_role", "學生")}
+      <button class="primary" id="n_save">新增學生</button><div id="n_msg"></div></div>` : ""}
+    ${T && !self ? `<div class="box"><h2>刪除學生</h2><p class="muted">會一併刪除該學生的所有檢測紀錄，無法從畫面復原。</p><button class="primary danger" id="d_btn">刪除 ${esc(p.name)}</button><div id="d_msg"></div></div>` : ""}
+    ${self ? `<div class="box"><h2>LINE 綁定</h2><button class="primary danger" id="reBind">解除綁定，重新綁定其他學號</button><div id="u_msg"></div></div>` : ""}
+    <p class="muted" style="text-align:center">後端版本 ${esc(S.v)}</p>`;
+  const msg = (id, ok, t) => $(id).innerHTML = `<p class="${ok ? "ok" : "err"}">${esc(t)}</p>`;
+  $("p_save").onclick = async () => {
+    const body = { studentId: p.studentId, newStudentId: $("p_sid").value, name: $("p_name").value, dept: $("p_dept").value, gender: $("p_gender").value, birthday: $("p_bir").value };
+    if ($("p_role")) body.role = $("p_role").value;
+    const r2 = await api("profile.save", body);
+    if (!r2.ok) return msg("p_msg", false, r2.error);
+    S.keep = T ? body.newStudentId.trim() : ""; S.page = "profile"; await main();
   };
+  if ($("n_save")) $("n_save").onclick = async () => {
+    const r2 = await api("profile.save", { studentId: $("n_sid").value, name: $("n_name").value, dept: $("n_dept").value, gender: $("n_gender").value, birthday: $("n_bir").value, role: $("n_role").value });
+    if (!r2.ok) return msg("n_msg", false, r2.error);
+    S.keep = $("n_sid").value.trim(); S.page = "profile"; await main();
+  };
+  if ($("d_btn")) { let armed = false;
+    $("d_btn").onclick = async () => {
+      if (!armed) { armed = true; $("d_btn").textContent = "再按一次確認刪除"; return; }
+      const r2 = await api("student.delete", { studentId: p.studentId });
+      if (!r2.ok) return msg("d_msg", false, r2.error);
+      S.keep = ""; S.page = "home"; await main();
+    }; }
+  if ($("reBind")) { let armed = false;
+    $("reBind").onclick = async () => {
+      if (!armed) { armed = true; $("reBind").textContent = "再按一次確認解除綁定"; return; }
+      const r2 = await api("unbind", {});
+      if (r2.ok) { S.me = null; main(); } else msg("u_msg", false, r2.error);
+    }; }
 }
 
 main();

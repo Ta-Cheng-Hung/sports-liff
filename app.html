@@ -62,7 +62,7 @@
 
 <script>
 const LIFF_ID = "2012441184-lIFb8L41";
-const GAS_URL = "https://script.google.com/macros/s/AKfycbzUKwp1JgcSSgxUqLu1tbCHvgRXUuXNtzFIjr6LcO9SrXWcMvkO0lbUiG0428L2_iyS/exec";
+const GAS_URL = "請填入 Apps Script 網頁應用程式網址（結尾 /exec）";
 const AXES = [["flex","柔軟度"],["muscle","肌耐力"],["power","瞬發力"],["cardio","心肺耐力"]];
 const $ = id => document.getElementById(id);
 const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -144,6 +144,7 @@ function go(p) {
   S.page = p;
   document.querySelectorAll("#nav button").forEach(b => b.classList.toggle("on", b.dataset.p === p));
   ({ home, input: inputPage, history: historyPage, qa: qaPage, profile }[p] || home)();
+  if (S.notice) { $("view").insertAdjacentHTML("afterbegin", `<div class="box ${S.notice.startsWith("已推播") ? "ok" : "err"}">${esc(S.notice)}</div>`); S.notice = ""; }
 }
 
 function radar(r) {
@@ -181,6 +182,7 @@ function inputPage() {
     $("save").disabled = true; $("msg").innerHTML = `<p class="muted">儲存中…</p>`;
     const r = await api("record.save", body);
     if (!r.ok) { $("save").disabled = false; $("msg").innerHTML = `<p class="err">${esc(r.error)}</p>`; return; }
+    S.notice = r.pushed ? "已推播檢測結果到 LINE，AI 處方完成後會再推播一次。" : "資料已儲存，但這次沒有推播成績卡片（" + (r.pushNote || "原因不明") + "）。";
     S.edit = null; S.page = "history"; await load();
   };
 }
